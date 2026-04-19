@@ -30,7 +30,8 @@ function moodFromRecent(recent: any[], top: Track[]) {
       return acc;
     }, {});
 
-  const mostRepeated = Object.entries(repeated).sort((a, b) => b[1] - a[1])[0];
+const mostRepeated = (Object.entries(repeated) as [string, number][])
+  .sort((a, b) => b[1] - a[1])[0];
 
   if (avgHour >= 0 && avgHour < 5) return "After Midnight / inward / replaying the same feeling";
   if (avgHour >= 5 && avgHour < 12) return "Morning Drift / reset / soft momentum";
