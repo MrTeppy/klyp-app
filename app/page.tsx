@@ -1,65 +1,110 @@
-import Image from "next/image";
+import AppHeader from "@/components/AppHeader";
+import Button from "@/components/Button";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="min-h-screen bg-[#f7f5f2] text-[#111]">
+      <div className="mx-auto max-w-7xl px-6 py-6">
+
+        <AppHeader subtitle="Your Space" />
+
+        {/* HERO */}
+        <section className="mt-20 grid gap-16 lg:grid-cols-[1.2fr_0.8fr] items-center">
+
+          {/* LEFT */}
+          <div>
+            <h1 className="text-6xl md:text-7xl font-semibold tracking-[-0.06em] leading-[0.95]">
+              social,
+              <br />
+              but with
+              <br />
+              <span className="text-black/40">actual taste.</span>
+            </h1>
+
+            <p className="mt-6 text-lg text-black/60 max-w-xl leading-8">
+              KLYP turns posts into atmosphere. Attach music, capture moments,
+              and let people continue the feeling instead of just reacting.
+            </p>
+
+            <div className="mt-8 flex gap-3">
+              <Button href="/feed">Enter KLYP</Button>
+              <Button href="/spotify" variant="secondary">
+                Connect Spotify
+              </Button>
+            </div>
+
+            {/* TAGS */}
+            <div className="mt-10 flex gap-2 flex-wrap">
+              <span className="text-xs bg-white border border-black/10 px-3 py-1 rounded-full text-black/50">
+                Image + Music Posts
+              </span>
+              <span className="text-xs bg-white border border-black/10 px-3 py-1 rounded-full text-black/50">
+                Spotify Linked
+              </span>
+              <span className="text-xs bg-white border border-black/10 px-3 py-1 rounded-full text-black/50">
+                Mood Based
+              </span>
+            </div>
+          </div>
+
+          {/* RIGHT PREVIEW CARD */}
+          <div className="bg-white border border-black/10 rounded-[28px] p-4 shadow-sm">
+
+            <div className="mb-3 text-xs text-black/40">
+              Now Playing — Let Down (Radiohead)
+            </div>
+
+            <div className="rounded-2xl bg-[#ddd] aspect-[4/5]" />
+
+            <div className="mt-4 bg-[#faf8f4] rounded-xl p-4">
+              <div className="text-xs text-black/40 mb-1">MUSIC POST</div>
+              <div className="text-sm font-medium">
+                train window reflections, city lights, same song again
+              </div>
+
+              <div className="mt-3 text-xs text-black/50">
+                Late Train / City Lights
+              </div>
+            </div>
+
+            <div className="mt-3 flex justify-between text-sm text-black/50">
+              <span>42 likes · 3 klyps</span>
+              <button className="px-3 py-1 rounded-full bg-black text-white text-xs">
+                Klyp
+              </button>
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* FEATURES */}
+        <section className="mt-24 grid gap-6 md:grid-cols-3">
+
+          <div className="bg-white border border-black/10 rounded-2xl p-6">
+            <div className="text-xs text-black/40 mb-2">POSTS</div>
+            <div className="text-lg font-medium">
+              image, song, mood, memory
+            </div>
+          </div>
+
+          <div className="bg-white border border-black/10 rounded-2xl p-6">
+            <div className="text-xs text-black/40 mb-2">CHAINS</div>
+            <div className="text-lg font-medium">
+              continue the feeling
+            </div>
+          </div>
+
+          <div className="bg-white border border-black/10 rounded-2xl p-6">
+            <div className="text-xs text-black/40 mb-2">AI</div>
+            <div className="text-lg font-medium">
+              your mood, understood
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
   );
 }
