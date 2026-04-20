@@ -24,9 +24,8 @@ export default function SpotifyCallbackPage() {
         }
 
         const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID!;
-        const redirectUri = process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI!;
         const codeVerifier = localStorage.getItem("spotify_code_verifier");
-
+        const redirectUri = "https://klyp-app.vercel.app/spotify/callback";
         if (!codeVerifier) {
           setError("Missing code verifier. Please try connecting again.");
           return;

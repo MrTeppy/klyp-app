@@ -25,8 +25,7 @@ function base64urlencode(input: ArrayBuffer) {
 export default function SpotifyPage() {
   async function handleConnect() {
     const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID!;
-    const redirectUri = process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI!;
-
+    const redirectUri = "https://klyp-app.vercel.app/spotify/callback";
     const codeVerifier = randomString(64);
     const hashed = await sha256(codeVerifier);
     const codeChallenge = base64urlencode(hashed);
