@@ -53,19 +53,26 @@ export default function SpotifyPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#efe9df] text-[#171717] flex items-center justify-center p-6">
-      <div className="w-full max-w-lg rounded-[30px] border border-black/10 bg-white p-6 shadow-sm">
-        <h1 className="text-3xl font-semibold tracking-tight">Connect Spotify</h1>
-        <p className="mt-3 text-black/60">
-          Link your listening history to KLYP.
-        </p>
+    <main className="min-h-screen bg-[#f7f5f2] text-[#111]">
+      <div className="mx-auto flex min-h-screen max-w-3xl items-center justify-center px-4 py-8">
+        <div className="w-full rounded-[28px] border border-black/10 bg-white p-6 shadow-sm sm:p-8">
+          <div className="text-[12px] uppercase tracking-[0.16em] text-black/35">
+            Spotify
+          </div>
+          <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
+            Connect your listening
+          </h1>
+          <p className="mt-4 max-w-lg text-[15px] leading-7 text-black/60">
+            Link Spotify to unlock top songs, daily recap, mood cards, and better posts.
+          </p>
 
-        <button
-          onClick={handleConnect}
-          className="mt-6 rounded-full bg-black px-5 py-3 text-sm text-white"
-        >
-          Connect Spotify
-        </button>
+          <button
+            onClick={handleConnect}
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+          >
+            Connect Spotify
+          </button>
+        </div>
       </div>
     </main>
   );
