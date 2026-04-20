@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 
 export default function SignupPage() {
   const [username, setUsername] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -17,9 +18,10 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        emailRedirectTo: "http://localhost:3000/auth/callback",
+        emailRedirectTo: "https://klyp-app.vercel.app/auth/callback",
         data: {
           username,
+          display_name: displayName,
         },
       },
     });
@@ -29,52 +31,80 @@ export default function SignupPage() {
       return;
     }
 
-    if (data.user) {
-      setMessage("Check your email to confirm your account.");
-    } else {
+    if (!data.user) {
       setMessage("Something went wrong.");
+      return;
     }
+
+    const { error: profileError } = await supabase.from("profiles").insert({
+      id: data.user.id,
+      username,
+      display_name: displayName,
+    });
+
+    if (profileError) {
+      setMessage(profileError.message);
+      return;
+    }
+
+    setMessage("Check your email to confirm your account.");
   }
 
   return (
-    <main className="min-h-screen bg-[#f3efe7] text-[#161616] flex items-center justify-center p-6">
-      <div className="w-full max-w-md rounded-[30px] border border-black/10 bg-white p-6 shadow-sm">
-        <h1 className="text-3xl font-semibold tracking-tight">Create Account</h1>
-        <p className="mt-2 text-black/55">Start your space on KLYP.</p>
-
-        <form onSubmit={handleSignup} className="mt-6 space-y-4">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none"
-          />
-          <button
-            type="submit"
-            className="w-full rounded-full bg-black px-4 py-3 text-white"
-          >
+    <main className="min-h-screen bg-[#f7f5f2] text-[#111]">
+      <div className="mx-auto max-w-md px-4 py-10">
+        <div className="rounded-[28px] border border-black/10 bg-white p-6 shadow-sm">
+          <div className="text-[12px] uppercase tracking-[0.16em] text-black/35">
             Create Account
-          </button>
-        </form>
+          </div>
+          <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">
+            Join KLYP
+          </h1>
+          <p className="mt-3 text-[15px] leading-7 text-black/60">
+            Create your identity first. Username, display name, then the rest.
+          </p>
 
-        {message ? (
-          <p className="mt-4 text-sm text-black/60">{message}</p>
-        ) : null}
+          <form onSubmit={handleSignup} className="mt-6 space-y-4">
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-[#faf8f4] px-4 py-3 outline-none"
+            />
+            <input
+              type="text"
+              placeholder="Display Name"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-[#faf8f4] px-4 py-3 outline-none"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-[#faf8f4] px-4 py-3 outline-none"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-[#faf8f4] px-4 py-3 outline-none"
+            />
+            <button
+              type="submit"
+              className="inline-flex w-full items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Create Account
+            </button>
+          </form>
+
+          {message ? (
+            <p className="mt-4 text-sm text-black/55">{message}</p>
+          ) : null}
+        </div>
       </div>
     </main>
   );

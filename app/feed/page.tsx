@@ -4,104 +4,66 @@ import Comments from "@/components/Comments";
 
 export default function FeedPage() {
   return (
-    <main className="min-h-screen bg-[#efe9df] text-[#171717]">
-      <div className="mx-auto max-w-7xl px-6 py-6 md:px-8">
+    <main className="min-h-screen bg-[#f7f5f2] text-[#111]">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6">
         <AppHeader subtitle="Feed" />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <section className="space-y-6">
-            <div className="rounded-[32px] border border-black/10 bg-white p-4 shadow-sm">
+            <article className="rounded-[30px] border border-black/10 bg-white p-4 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-11 w-11 rounded-full bg-[linear-gradient(135deg,#74806b,#d8ded2)]" />
-                  <div>
-                    <div className="text-[15px] font-medium">@charlie</div>
-                    <div className="text-[12px] text-black/45">Friends Can Klyp · 12m Ago</div>
-                  </div>
+                <div>
+                  <div className="text-[15px] font-medium">Charlie</div>
+                  <div className="text-[13px] text-black/55">@charlie · Friends Can Klyp</div>
                 </div>
                 <div className="rounded-full border border-black/10 px-3 py-1 text-[12px] text-black/50">
                   Linked from Spotify
                 </div>
               </div>
 
-              <div className="mb-4 rounded-[24px] border border-black/10 bg-[#faf8f4] p-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-[12px] text-black/38">Now Playing</div>
-                    <div className="mt-1 text-[15px] font-medium">Let Down — Radiohead</div>
-                    <div className="text-[12px] text-black/45">from listening history</div>
-                  </div>
-                  <div className="rounded-full bg-black px-3 py-1 text-[12px] text-white">Spotify</div>
-                </div>
+              <div className="mx-auto max-w-[390px]">
+                <div className="aspect-[9/16] overflow-hidden rounded-[26px] bg-[linear-gradient(180deg,#d8ddd4,#9aa58e_48%,#6e7769)]" />
               </div>
 
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-[#dfe6d8]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#f3f6ef,transparent_30%),linear-gradient(180deg,#89977f,#5a6755)]" />
-                <div className="absolute right-4 top-4 rounded-full bg-black/70 px-3 py-1 text-[12px] text-white">
-                  IMAGE
+              <div className="mt-4 rounded-[22px] bg-[#faf8f4] p-4">
+                <div className="text-[11px] uppercase tracking-[0.16em] text-black/35">
+                  Music Post
                 </div>
-                <div className="absolute bottom-4 left-4 right-4 rounded-[22px] bg-white/75 p-4 backdrop-blur">
-                  <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">Music Post</div>
-                  <div className="mt-2 text-[16px] font-medium leading-6">
-                    train window reflections, city lights, and the exact song that made the whole thing feel cinematic
-                  </div>
-                  <div className="mt-3 rounded-full bg-black/5 px-3 py-2 text-[12px] text-black/55 inline-block">
+                <div className="mt-2 text-[15px] font-medium leading-6">
+                  train window reflections, city lights, and the exact song that made the whole thing feel cinematic
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-white px-3 py-2 text-[12px] text-black/55">
+                    Let Down — Radiohead
+                  </span>
+                  <span className="rounded-full bg-white px-3 py-2 text-[12px] text-black/55">
                     Late Train / City Lights
-                  </div>
+                  </span>
                 </div>
               </div>
 
               <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-3 text-[13px] text-black/50">
-                  <span>42 Likes</span>
-                  <span>8 Saves</span>
-                  <span>3 Klyps</span>
+                <div className="text-[13px] text-black/50">
+                  42 Likes · 3 Klyps · 12 Comments
                 </div>
-                <button className="rounded-full bg-black px-4 py-2 text-[13px] text-white">
+                <button className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition hover:opacity-90">
                   Klyp This
                 </button>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                <div className="ml-auto max-w-[260px] rounded-[22px] border border-black/10 bg-[#faf8f4] p-3">
+                  <div className="text-[12px] text-black/40">Klyp 01</div>
+                  <div className="mt-2 text-[14px] font-medium">same feeling, different city</div>
+                </div>
+                <div className="mr-auto max-w-[260px] rounded-[22px] border border-black/10 bg-[#faf8f4] p-3">
+                  <div className="text-[12px] text-black/40">Klyp 02</div>
+                  <div className="mt-2 text-[14px] font-medium">still replaying it two nights later</div>
+                </div>
               </div>
 
               <Comments postSlug="late-train-city-lights" />
-            </div>
-
-            <div className="rounded-[32px] border border-black/10 bg-white p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-11 w-11 rounded-full bg-[linear-gradient(135deg,#d5c0a0,#f3e8d9)]" />
-                  <div>
-                    <div className="text-[15px] font-medium">@noah</div>
-                    <div className="text-[12px] text-black/45">Everyone Can Klyp · 38m Ago</div>
-                  </div>
-                </div>
-                <div className="rounded-full border border-black/10 px-3 py-1 text-[12px] text-black/50">
-                  Mood Post
-                </div>
-              </div>
-
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-[#efe4d6]">
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,#e8dbc8,#c6ae8f)]" />
-                <div className="absolute bottom-4 left-4 right-4 rounded-[22px] bg-white/78 p-4 backdrop-blur">
-                  <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">Chain Starter</div>
-                  <div className="mt-2 text-[16px] font-medium leading-6">
-                    summer evening, empty court, one song on repeat
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-3 text-[13px] text-black/50">
-                  <span>19 Likes</span>
-                  <span>2 Saves</span>
-                  <span>5 Klyps</span>
-                </div>
-                <button className="rounded-full bg-black px-4 py-2 text-[13px] text-white">
-                  Klyp This
-                </button>
-              </div>
-
-              <Comments postSlug="summer-evening-court" />
-            </div>
+            </article>
           </section>
 
           <aside>
