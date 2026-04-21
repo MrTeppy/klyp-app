@@ -1,5 +1,6 @@
-import Link from "next/link";
 import AppHeader from "@/components/AppHeader";
+import SpotifyConnectButton from "@/components/SpotifyConnectButton";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -8,16 +9,16 @@ export default function Home() {
         <AppHeader subtitle="Your Space" />
 
         <section className="mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div className="max-w-2xl">
+          <div className="order-1 max-w-2xl">
             <div className="mb-4 flex flex-wrap gap-2">
               <span className="rounded-full border border-black/10 bg-white px-3 py-1 text-[11px] text-black/50">
-                Image + Music Posts
+                Shared Memory Posts
               </span>
               <span className="rounded-full border border-black/10 bg-white px-3 py-1 text-[11px] text-black/50">
                 Spotify Linked
               </span>
               <span className="rounded-full border border-black/10 bg-white px-3 py-1 text-[11px] text-black/50">
-                Mood Based
+                Add to Klyp
               </span>
             </div>
 
@@ -30,8 +31,8 @@ export default function Home() {
             </h1>
 
             <p className="mt-5 max-w-xl text-[16px] leading-7 text-black/60 sm:text-[18px] sm:leading-8">
-              KLYP turns posts into atmosphere. Attach music, capture moments,
-              and let people continue the feeling instead of just reacting.
+              KLYP turns one post into a shared memory. Start with your image,
+              attach the song, then let friends add their own moments into the same post.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -42,23 +43,18 @@ export default function Home() {
                 Enter KLYP
               </Link>
 
-              <Link
-                href="/spotify"
-                className="inline-flex items-center justify-center rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-medium text-black/70 transition hover:bg-black/5"
-              >
-                Connect Spotify
-              </Link>
+              <SpotifyConnectButton />
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[420px]">
+          <div className="order-2 relative mx-auto w-full max-w-[430px]">
             <div className="space-y-4">
               <article className="mr-auto w-[84%] rounded-[28px] border border-black/10 bg-white p-3 shadow-sm sm:w-[78%]">
                 <div className="mb-3 flex items-center justify-between">
                   <div>
-                    <div className="text-[11px] text-black/40">Now Playing</div>
+                    <div className="text-[11px] text-black/40">Main Post</div>
                     <div className="mt-1 text-[13px] font-medium">
-                      Let Down — Radiohead
+                      Charlie · city lights
                     </div>
                   </div>
                   <div className="rounded-full bg-black px-3 py-1 text-[11px] text-white">
@@ -76,7 +72,7 @@ export default function Home() {
                     train window reflections, city lights, same song again
                   </div>
                   <div className="mt-3 text-[11px] text-black/50">
-                    Late Train / City Lights
+                    Let Down — Radiohead
                   </div>
                 </div>
               </article>
@@ -84,13 +80,13 @@ export default function Home() {
               <article className="ml-auto w-[84%] rounded-[28px] border border-black/10 bg-white p-3 shadow-sm sm:w-[78%]">
                 <div className="mb-3 flex items-center justify-between">
                   <div>
-                    <div className="text-[11px] text-black/40">Chain Reply</div>
+                    <div className="text-[11px] text-black/40">Added to Klyp</div>
                     <div className="mt-1 text-[13px] font-medium">
-                      same feeling, different place
+                      Ivy · same night
                     </div>
                   </div>
                   <div className="rounded-full border border-black/10 px-3 py-1 text-[11px] text-black/55">
-                    Klyp 01
+                    +3 photos
                   </div>
                 </div>
 
@@ -101,13 +97,42 @@ export default function Home() {
                     Continuation
                   </div>
                   <div className="mt-2 text-[13px] font-medium leading-5">
-                    different city, same replayed mood
+                    different angle, same replayed mood
                   </div>
                   <div className="mt-3 text-[11px] text-black/50">
-                    Soft Repeat / Evening Drift
+                    Add to Klyp, not just reply
                   </div>
                 </div>
               </article>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-16 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-[24px] border border-black/10 bg-white p-5">
+            <div className="text-[11px] uppercase tracking-[0.16em] text-black/35">
+              Posts
+            </div>
+            <div className="mt-3 text-[18px] font-medium leading-6">
+              image, song, mood, memory
+            </div>
+          </div>
+
+          <div className="rounded-[24px] border border-black/10 bg-white p-5">
+            <div className="text-[11px] uppercase tracking-[0.16em] text-black/35">
+              Add to Klyp
+            </div>
+            <div className="mt-3 text-[18px] font-medium leading-6">
+              friends attach their own moments into the same post
+            </div>
+          </div>
+
+          <div className="rounded-[24px] border border-black/10 bg-white p-5">
+            <div className="text-[11px] uppercase tracking-[0.16em] text-black/35">
+              Mood
+            </div>
+            <div className="mt-3 text-[18px] font-medium leading-6">
+              your week, understood through music
             </div>
           </div>
         </section>
