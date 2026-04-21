@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function AppHeader({ subtitle = "KLYP" }: { subtitle?: string }) {
+export default function AppHeader({ subtitle = "klyp.life" }: { subtitle?: string }) {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -40,31 +40,16 @@ export default function AppHeader({ subtitle = "KLYP" }: { subtitle?: string }) 
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5"
-          >
+          <Link href="/" className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5">
             Home
           </Link>
-
-          <Link
-            href="/feed"
-            className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5"
-          >
+          <Link href="/feed" className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5">
             Feed
           </Link>
-
-          <Link
-            href="/profile"
-            className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5"
-          >
+          <Link href="/profile" className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5">
             Profile
           </Link>
-
-          <Link
-            href="/search"
-            className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5"
-          >
+          <Link href="/search" className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5">
             Search
           </Link>
 
@@ -77,17 +62,10 @@ export default function AppHeader({ subtitle = "KLYP" }: { subtitle?: string }) 
             </button>
           ) : (
             <>
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5"
-              >
+              <Link href="/login" className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm text-black/65 transition hover:bg-black/5">
                 Log In
               </Link>
-
-              <Link
-                href="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-              >
+              <Link href="/signup" className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition hover:opacity-90">
                 Create Account
               </Link>
             </>

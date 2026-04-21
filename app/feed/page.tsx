@@ -1,12 +1,13 @@
 import AppHeader from "@/components/AppHeader";
 import SpotifyInsights from "@/components/SpotifyInsights";
 import Comments from "@/components/Comments";
+import KlypButton from "@/components/KlypButton";
 
 export default function FeedPage() {
   return (
     <main className="min-h-screen bg-[#f7f5f2] text-[#111]">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6">
-        <AppHeader subtitle="Feed" />
+        <AppHeader subtitle="klyp.life" />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <section className="space-y-6">
@@ -44,11 +45,9 @@ export default function FeedPage() {
 
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-[13px] text-black/50">
-                  42 Likes · 2 additions · 12 Comments
+                  42 Likes · 12 Comments
                 </div>
-                <button className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition hover:opacity-90">
-                  Add to Klyp
-                </button>
+                <KlypButton postSlug="late-train-city-lights" />
               </div>
 
               <div className="mt-5 space-y-3">
