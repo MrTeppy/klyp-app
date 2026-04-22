@@ -1,13 +1,14 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function AddToKlypPage() {
-  const params = useSearchParams();
-  const postSlug = params.get("post") || "";
-
+export default function AddToKlypPage({
+  searchParams,
+}: {
+  searchParams: { post?: string };
+}) {
+  const postSlug = searchParams.post || "";
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
 
@@ -26,24 +27,25 @@ export default function AddToKlypPage() {
 
     const path = `klyp/${Date.now()}-${file.name}`;
 
-    const { error } = await supabase.storage
-      .from("images")
-      .upload(path, file);
+    const { error } = await supabase.storage.from("images").upload(path, file);
 
     if (error) {
       setStatus(error.message);
       return;
     }
 
-    const { data } = supabase.storage
-      .from("images")
-      .getPublicUrl(path);
+    const { data } = supabase.storage.from("images").getPublicUrl(path);
 
-    await supabase.from("klyp_items").insert({
+    const { error: insertError } = await supabase.from("klyp_items").insert({
       post_slug: postSlug,
       user_id: user.id,
       image_url: data.publicUrl,
     });
+
+    if (insertError) {
+      setStatus(insertError.message);
+      return;
+    }
 
     setStatus("Done");
     window.location.href = "/feed";
@@ -58,9 +60,7 @@ export default function AddToKlypPage() {
         onChange={(e) => setFile(e.target.files?.[0] || null)}
       />
 
-      <button onClick={handleUpload}>
-        Upload
-      </button>
+      <button onClick={handleUpload}>Upload</button>
 
       <p>{status}</p>
     </main>
