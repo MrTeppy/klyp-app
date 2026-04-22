@@ -1,0 +1,26 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#201A18"/>
+      <stop offset="0.45" stop-color="#3B2C24"/>
+      <stop offset="1" stop-color="#8F6A52"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(78 62) rotate(40) scale(130 120)">
+      <stop stop-color="#F1D7BE" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#F1D7BE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="letter" x1="92" y1="70" x2="160" y2="178" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F1"/>
+      <stop offset="1" stop-color="#F2DFCF"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="12" y="12" width="232" height="232" rx="56" fill="url(#bg)"/>
+  <rect x="12" y="12" width="232" height="232" rx="56" fill="url(#glow)"/>
+  <rect x="12.5" y="12.5" width="231" height="231" rx="55.5" stroke="rgba(255,255,255,0.08)"/>
+
+  <path d="M86 72C86 66.4772 90.4772 62 96 62H109C114.523 62 119 66.4772 119 72V116.5L156.5 69C158.396 66.5979 161.287 65.1899 164.347 65.1899H177.472C185.875 65.1899 190.534 74.9262 185.28 81.4844L148.543 127.333L188.494 176.321C193.826 182.861 189.172 192.81 180.733 192.81H167.034C163.992 192.81 161.115 191.418 159.217 189.041L127.807 149.724L119 160.425V183C119 188.523 114.523 193 109 193H96C90.4772 193 86 188.523 86 183V72Z" fill="url(#letter)"/>
+
+  <circle cx="191" cy="61" r="10" fill="#F7E4D3" fill-opacity="0.9"/>
+  <circle cx="191" cy="61" r="18" fill="#F7E4D3" fill-opacity="0.12"/>
+</svg>
