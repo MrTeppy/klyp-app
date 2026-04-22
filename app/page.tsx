@@ -1,11 +1,12 @@
 import AppHeader from "@/components/AppHeader";
 import SpotifyConnectButton from "@/components/SpotifyConnectButton";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#f7f5f2] text-[#111]">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6">
-        <AppHeader subtitle="klyp.life" />
+        <AppHeader subtitle="Your Space" />
 
         <section className="mt-8 grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div className="max-w-2xl">
@@ -35,12 +36,12 @@ export default function Home() {
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              <a
+              <Link
                 href="/feed"
                 className="inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
               >
                 Enter KLYP
-              </a>
+              </Link>
               <SpotifyConnectButton />
             </div>
           </div>

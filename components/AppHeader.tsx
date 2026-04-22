@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function AppHeader({ subtitle = "klyp.life" }: { subtitle?: string }) {
+export default function AppHeader({ subtitle = "Your Space" }: { subtitle?: string }) {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
