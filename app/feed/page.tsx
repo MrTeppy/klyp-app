@@ -74,4 +74,3 @@ export default function FeedPage() {
     </main>
   );
 }
-EOF
