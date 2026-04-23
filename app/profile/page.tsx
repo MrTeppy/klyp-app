@@ -18,42 +18,89 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#efe9df] text-[#171717]">
-      <div className="mx-auto max-w-7xl px-6 py-6 md:px-8">
+    <main className="min-h-screen bg-[#f5f1e8] text-[#151515]">
+      <div className="mx-auto max-w-[1440px] px-4 py-4 sm:px-6 sm:py-6">
         <AppHeader subtitle="Profile" />
 
         {!loaded ? (
-          <div className="rounded-[32px] border border-black/10 bg-white p-8 shadow-sm">
+          <div className="rounded-[32px] border border-black/10 bg-white/88 p-8 shadow-sm">
             <p className="text-black/60">Loading profile…</p>
           </div>
         ) : user ? (
-          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
             <section className="space-y-6">
-              <div className="rounded-[32px] border border-black/10 bg-white p-8 shadow-sm">
-                <div className="text-[12px] uppercase tracking-[0.16em] text-black/35">Account</div>
-                <h1 className="mt-3 text-3xl font-semibold">Your Profile</h1>
+              <div className="rounded-[32px] border border-black/10 bg-white/88 p-8 shadow-sm backdrop-blur">
+                <div className="text-[12px] uppercase tracking-[0.18em] text-black/35">
+                  Account
+                </div>
+                <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em]">
+                  Your Profile
+                </h1>
                 <p className="mt-3 text-black/60">
-                  Signed in as <span className="font-medium text-black">{user.email}</span>
+                  Signed in as{" "}
+                  <span className="font-medium text-black">{user.email}</span>
                 </p>
 
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[24px] bg-[#f8f5ef] p-5">
+                <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                  <div className="rounded-[24px] bg-[#faf8f4] p-5">
                     <div className="text-[13px] text-black/45">Current Atmosphere</div>
-                    <div className="mt-2 text-[18px] font-medium">Late Train / City Lights</div>
+                    <div className="mt-2 text-[17px] font-medium">
+                      Late Train / City Lights
+                    </div>
                   </div>
-                  <div className="rounded-[24px] bg-[#f8f5ef] p-5">
+
+                  <div className="rounded-[24px] bg-[#faf8f4] p-5">
                     <div className="text-[13px] text-black/45">Most Replayed Mood</div>
-                    <div className="mt-2 text-[18px] font-medium">Quiet Replay / Grey Glow</div>
+                    <div className="mt-2 text-[17px] font-medium">
+                      Quiet Replay / Grey Glow
+                    </div>
+                  </div>
+
+                  <div className="rounded-[24px] bg-[#faf8f4] p-5">
+                    <div className="text-[13px] text-black/45">Profile Type</div>
+                    <div className="mt-2 text-[17px] font-medium">
+                      Friends-first
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-[32px] border border-black/10 bg-white p-8 shadow-sm">
-                <div className="text-[12px] uppercase tracking-[0.16em] text-black/35">KLYP+</div>
-                <h2 className="mt-3 text-2xl font-semibold">Prototype Tier</h2>
-                <p className="mt-3 max-w-xl text-black/60 leading-7">
-                  Deeper mood summaries, stronger weekly recaps, and richer profile atmosphere.
-                </p>
+              <div className="rounded-[32px] border border-black/10 bg-white/88 p-8 shadow-sm backdrop-blur">
+                <div className="text-[12px] uppercase tracking-[0.18em] text-black/35">
+                  Settings
+                </div>
+
+                <div className="mt-6 space-y-4">
+                  <div className="flex items-center justify-between rounded-[20px] bg-[#faf8f4] p-4">
+                    <div>
+                      <div className="text-[15px] font-medium">Theme</div>
+                      <div className="text-[13px] text-black/50">Light mode for now</div>
+                    </div>
+                    <button className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-black/65">
+                      Manage
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-[20px] bg-[#faf8f4] p-4">
+                    <div>
+                      <div className="text-[15px] font-medium">Privacy</div>
+                      <div className="text-[13px] text-black/50">Friends can klyp your posts</div>
+                    </div>
+                    <button className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-black/65">
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-[20px] bg-[#faf8f4] p-4">
+                    <div>
+                      <div className="text-[15px] font-medium">Sound Preferences</div>
+                      <div className="text-[13px] text-black/50">Music-first posts enabled</div>
+                    </div>
+                    <button className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-black/65">
+                      Adjust
+                    </button>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -62,17 +109,25 @@ export default function ProfilePage() {
             </aside>
           </div>
         ) : (
-          <div className="rounded-[32px] border border-black/10 bg-white p-8 shadow-sm">
-            <div className="text-[12px] uppercase tracking-[0.16em] text-black/35">Profile</div>
+          <div className="rounded-[32px] border border-black/10 bg-white/88 p-8 shadow-sm">
+            <div className="text-[12px] uppercase tracking-[0.18em] text-black/35">
+              Profile
+            </div>
             <h1 className="mt-3 text-3xl font-semibold">You’re not logged in</h1>
             <p className="mt-3 text-black/60">
               Log in first, then your profile and Spotify cards will appear here.
             </p>
             <div className="mt-6 flex gap-3">
-              <Link href="/login" className="rounded-full bg-black px-5 py-3 text-sm text-white">
+              <Link
+                href="/login"
+                className="rounded-full bg-black px-5 py-3 text-sm text-white"
+              >
                 Log In
               </Link>
-              <Link href="/signup" className="rounded-full border border-black/10 bg-white px-5 py-3 text-sm text-black/70">
+              <Link
+                href="/signup"
+                className="rounded-full border border-black/10 bg-white px-5 py-3 text-sm text-black/70"
+              >
                 Create Account
               </Link>
             </div>
@@ -82,27 +137,3 @@ export default function ProfilePage() {
     </main>
   );
 }
-
-
-<div className="mt-8 rounded-2xl bg-white p-6 text-black">
-  <div className="text-sm font-semibold mb-4">Settings</div>
-
-  <div className="flex justify-between items-center mb-3">
-    <span>Dark Mode</span>
-    <button
-      onClick={() => {
-        document.documentElement.classList.toggle("dark");
-      }}
-      className="bg-black text-white px-3 py-1 rounded-full text-xs"
-    >
-      Toggle
-    </button>
-  </div>
-
-  <div className="flex justify-between items-center">
-    <span>Private Profile</span>
-    <button className="border px-3 py-1 rounded-full text-xs">
-      Off
-    </button>
-  </div>
-</div>
