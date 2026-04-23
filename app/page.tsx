@@ -12,6 +12,9 @@ export default function Home() {
 
         <div className="mx-auto max-w-[1500px] px-4 py-4 sm:px-6 sm:py-6">
           <AppHeader subtitle="Your Space" />
+<div className="rounded-full bg-red-500 px-4 py-2 text-white text-sm inline-block">
+  TEST VERSION 999
+</div>
 
           <section className="grid min-h-[calc(100vh-120px)] items-center gap-12 xl:grid-cols-[1.05fr_0.95fr]">
             <div className="relative z-10 max-w-3xl">
