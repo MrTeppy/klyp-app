@@ -4,22 +4,22 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#f3ede2] text-[#161616]">
-      <div className="relative mx-auto max-w-[1440px] px-4 py-4 sm:px-6 sm:py-6">
-        <div className="pointer-events-none absolute left-[-120px] top-[140px] h-[340px] w-[340px] rounded-full bg-[#e6cdb2] blur-3xl opacity-55" />
-        <div className="pointer-events-none absolute right-[-80px] top-[220px] h-[360px] w-[360px] rounded-full bg-[#cfdcc8] blur-3xl opacity-55" />
-        <div className="pointer-events-none absolute bottom-[40px] left-[45%] h-[260px] w-[260px] rounded-full bg-[#d8d1eb] blur-3xl opacity-40" />
+    <main className="min-h-screen overflow-hidden bg-[#f4efe6] text-[#171717]">
+      <div className="relative mx-auto max-w-[1480px] px-4 py-4 sm:px-6 sm:py-6">
+        <div className="pointer-events-none absolute left-[-100px] top-[120px] h-[320px] w-[320px] rounded-full bg-[#e7d3bf] blur-3xl opacity-55" />
+        <div className="pointer-events-none absolute right-[-80px] top-[220px] h-[340px] w-[340px] rounded-full bg-[#d6e0d2] blur-3xl opacity-55" />
+        <div className="pointer-events-none absolute bottom-[70px] left-[40%] h-[240px] w-[240px] rounded-full bg-[#ddd5ee] blur-3xl opacity-40" />
 
         <AppHeader subtitle="Your Space" />
 
-        <section className="relative mt-8 grid gap-12 xl:grid-cols-[1.05fr_0.95fr] xl:items-center">
-          <div className="relative z-10 max-w-3xl">
+        <section className="relative mt-8 grid gap-12 xl:grid-cols-[1.03fr_0.97fr] xl:items-center">
+          <div className="max-w-3xl">
             <div className="mb-5 flex flex-wrap gap-2">
               <span className="rounded-full border border-black/10 bg-white/80 px-3 py-1 text-[11px] text-black/55 backdrop-blur">
                 Shared Memory Posts
               </span>
               <span className="rounded-full border border-black/10 bg-white/80 px-3 py-1 text-[11px] text-black/55 backdrop-blur">
-                Spotify Linked
+                Music + Sound
               </span>
               <span className="rounded-full border border-black/10 bg-white/80 px-3 py-1 text-[11px] text-black/55 backdrop-blur">
                 Friends Can Klyp
@@ -31,13 +31,13 @@ export default function Home() {
               <br />
               but with
               <br />
-              <span className="text-black/35">reverb.</span>
+              <span className="text-black/35">atmosphere.</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-[17px] leading-8 text-black/62 sm:text-[19px]">
-              KLYP turns one post into a shared memory. Start with your image
-              and song, then let friends klyp their own photos into the same
-              post instead of burying the moment underneath it.
+              KLYP turns one post into a shared memory. Start with your image,
+              attach the track or sound that held it together, then let friends
+              klyp their own moments into the same post.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -52,14 +52,14 @@ export default function Home() {
                 href="/upload"
                 className="inline-flex items-center justify-center rounded-full border border-black/10 bg-white/85 px-6 py-3 text-sm font-medium text-black/72 shadow-sm backdrop-blur transition hover:-translate-y-[1px] hover:bg-white"
               >
-                Upload Post
+                New Post
               </Link>
 
               <SpotifyConnectButton />
             </div>
 
             <div className="mt-14 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-[28px] border border-black/10 bg-white/80 p-5 shadow-sm backdrop-blur">
+              <div className="rounded-[28px] border border-black/10 bg-white/82 p-5 shadow-sm backdrop-blur">
                 <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">
                   Posts
                 </div>
@@ -68,47 +68,40 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="rounded-[28px] border border-black/10 bg-white/80 p-5 shadow-sm backdrop-blur">
+              <div className="rounded-[28px] border border-black/10 bg-white/82 p-5 shadow-sm backdrop-blur">
                 <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">
                   Klyp
                 </div>
                 <div className="mt-3 text-[17px] font-medium leading-6">
-                  friends add their own angle into the same post
+                  add your own angle into the same post
                 </div>
               </div>
 
-              <div className="rounded-[28px] border border-black/10 bg-white/80 p-5 shadow-sm backdrop-blur">
+              <div className="rounded-[28px] border border-black/10 bg-white/82 p-5 shadow-sm backdrop-blur">
                 <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">
-                  Music
+                  Sound
                 </div>
                 <div className="mt-3 text-[17px] font-medium leading-6">
-                  your week, understood through sound
+                  tracks and sounds stay attached to the moment
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="relative z-10 mx-auto w-full max-w-[620px]">
-            <div className="hidden xl:block absolute -left-12 top-24 h-[1px] w-16 bg-black/10" />
-            <div className="hidden xl:block absolute -right-12 bottom-20 h-[1px] w-16 bg-black/10" />
-
+          <div className="mx-auto w-full max-w-[640px]">
             <div className="relative">
-              <article className="relative ml-0 w-[78%] rounded-[34px] border border-black/10 bg-white/82 p-4 shadow-[0_22px_60px_rgba(0,0,0,0.09)] backdrop-blur">
+              <article className="relative z-20 mr-auto w-[78%] rounded-[34px] border border-black/10 bg-white/85 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.09)] backdrop-blur">
                 <div className="mb-3 flex items-center justify-between">
                   <div>
                     <div className="text-[11px] text-black/40">Main Post</div>
-                    <div className="mt-1 text-[13px] font-medium">
-                      Charlie · city lights
-                    </div>
+                    <div className="mt-1 text-[13px] font-medium">Charlie · city lights</div>
                   </div>
                   <div className="rounded-full bg-black px-3 py-1 text-[11px] text-white">
                     Live
                   </div>
                 </div>
 
-                <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,#d7dac6,#9ea480_46%,#59634f)]">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.36),transparent_28%)]" />
-                </div>
+                <div className="aspect-[9/16] overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,#d7dbc9,#9ea581_45%,#5e6754)]" />
 
                 <div className="mt-3 rounded-[20px] bg-[#fbf7f0] p-4">
                   <div className="text-[10px] uppercase tracking-[0.16em] text-black/35">
@@ -128,22 +121,18 @@ export default function Home() {
                 </div>
               </article>
 
-              <article className="-mt-24 ml-auto w-[78%] rounded-[34px] border border-black/10 bg-white/82 p-4 shadow-[0_22px_60px_rgba(0,0,0,0.09)] backdrop-blur">
+              <article className="relative z-10 -mt-24 ml-auto w-[78%] rounded-[34px] border border-black/10 bg-white/85 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.09)] backdrop-blur">
                 <div className="mb-3 flex items-center justify-between">
                   <div>
                     <div className="text-[11px] text-black/40">Klyped by Ivy</div>
-                    <div className="mt-1 text-[13px] font-medium">
-                      same night · different angle
-                    </div>
+                    <div className="mt-1 text-[13px] font-medium">same night · different angle</div>
                   </div>
                   <div className="rounded-full border border-black/10 bg-white px-3 py-1 text-[11px] text-black/55">
                     +3 photos
                   </div>
                 </div>
 
-                <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,#f0dccd,#cfab8c_55%,#9c7254)]">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.35),transparent_28%)]" />
-                </div>
+                <div className="aspect-[9/16] overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,#eedfd4,#d3b49a_55%,#9c7355)]" />
 
                 <div className="mt-3 rounded-[20px] bg-[#fbf7f0] p-4">
                   <div className="text-[10px] uppercase tracking-[0.16em] text-black/35">
@@ -158,7 +147,7 @@ export default function Home() {
                 </div>
               </article>
 
-              <article className="-mt-16 mr-auto w-[58%] rounded-[28px] border border-black/10 bg-[#181818] p-5 text-white shadow-[0_16px_46px_rgba(0,0,0,0.14)]">
+              <article className="relative z-30 -mt-16 mr-auto w-[58%] rounded-[28px] border border-black/10 bg-[#1d1918] p-5 text-white shadow-[0_16px_46px_rgba(0,0,0,0.14)]">
                 <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
                   Weekly Mood
                 </div>
@@ -169,62 +158,8 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        <section className="mt-20 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-[34px] border border-black/10 bg-[#201a18] p-7 text-white shadow-[0_18px_50px_rgba(0,0,0,0.14)]">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
-              Why it feels different
-            </div>
-            <div className="mt-4 text-[30px] font-semibold tracking-[-0.06em] leading-[1.02]">
-              not louder.
-              <br />
-              more felt.
-            </div>
-            <p className="mt-4 max-w-md text-[15px] leading-7 text-white/72">
-              KLYP is built around the feeling of a day, not just the content of
-              it. One post, one song, multiple people, same memory.
-            </p>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-[28px] border border-black/10 bg-white/82 p-5 shadow-sm backdrop-blur">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">
-                Shared posts
-              </div>
-              <div className="mt-3 text-[18px] font-medium leading-6">
-                friends don’t reply under it — they klyp into it
-              </div>
-            </div>
-
-            <div className="rounded-[28px] border border-black/10 bg-white/82 p-5 shadow-sm backdrop-blur">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">
-                Music-first
-              </div>
-              <div className="mt-3 text-[18px] font-medium leading-6">
-                every post keeps the track that held the moment together
-              </div>
-            </div>
-
-            <div className="rounded-[28px] border border-black/10 bg-white/82 p-5 shadow-sm backdrop-blur">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">
-                Mood system
-              </div>
-              <div className="mt-3 text-[18px] font-medium leading-6">
-                your listening becomes atmosphere, not just stats
-              </div>
-            </div>
-
-            <div className="rounded-[28px] border border-black/10 bg-white/82 p-5 shadow-sm backdrop-blur">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-black/35">
-                Identity
-              </div>
-              <div className="mt-3 text-[18px] font-medium leading-6">
-                more editorial, less generic social app
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
     </main>
   );
 }
+EOF
