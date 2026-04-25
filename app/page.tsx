@@ -200,13 +200,13 @@ export default function Home() {
             Explore
           </button>
           <button
-            onClick={() => router.push("/klyp/add")}
+            onClick={() => router.push("/upload")}
             className="rounded-full bg-[#111] px-5 py-2 text-white active:opacity-70"
           >
             +
           </button>
           <button
-            onClick={() => router.push("/search")}
+            onClick={() => router.push("/feed")}
             className="text-[#82766b] hover:text-[#111]"
           >
             Friends
