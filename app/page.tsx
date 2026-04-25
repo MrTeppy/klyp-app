@@ -51,7 +51,7 @@ export default function Home() {
           </div>
 
           <button
-            onClick={() => router.push("/klyp/add")}
+            onClick={() => router.push("/upload")}
             className="rounded-full bg-[#111] px-5 py-2 text-sm font-medium text-white shadow-sm active:opacity-70"
           >
             + Post
@@ -140,7 +140,7 @@ export default function Home() {
 
               {/* Image */}
               <div
-                onClick={() => router.push(`/klyp/add?post=${post.id}`)}
+                onClick={() => router.push(`/upload?post=${post.id}`)}
                 className="cursor-pointer overflow-hidden rounded-[24px]"
               >
                 <img
@@ -174,7 +174,7 @@ export default function Home() {
 
               {/* Klyp this post */}
               <button
-                onClick={() => router.push(`/klyp/add?post=${post.id}`)}
+                onClick={() => router.push(`/upload?post=${post.id}`)}
                 className="mt-4 w-full rounded-full border border-[#e0d6ca] bg-white py-2.5 text-sm font-medium text-[#111] transition hover:bg-[#f4efe8] active:opacity-70"
               >
                 + Klyp this moment
