@@ -21,6 +21,18 @@ export default function UploadPage() {
 
     setStatus("Uploading image...");
 
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setStatus("Only JPG, PNG, or WEBP images allowed.");
+      return;
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setStatus("Image must be under 5MB.");
+      return;
+    }
+
     const filePath = `posts/${Date.now()}-${file.name}`;
     const { error } = await supabase.storage.from("images").upload(filePath, file);
 
@@ -47,54 +59,36 @@ export default function UploadPage() {
     setResults(data.tracks || []);
   }
 
- async function searchByVibe(v: string) {
-  setVibe(v);
-
-  if (!v.trim()) {
-    setResults([]);
-    return;
-  }
-
-  const lower = v.toLowerCase();
-
-  let search = "";
-
-  if (lower.includes("happy") || lower.includes("upbeat")) {
-    search = "feel good indie pop";
-  } else if (lower.includes("sad") || lower.includes("cry")) {
-    search = "sad indie acoustic";
-  } else if (lower.includes("night") || lower.includes("late")) {
-    search = "late night drive";
-  } else if (lower.includes("drive") || lower.includes("car")) {
-    search = "driving indie rock";
-  } else if (lower.includes("love") || lower.includes("romantic")) {
-    search = "romantic indie pop";
-  } else if (lower.includes("angry") || lower.includes("rage")) {
-    search = "angry rock";
-  } else if (lower.includes("chill") || lower.includes("calm")) {
-    search = "chill indie";
-  } else if (lower.includes("summer")) {
-    search = "summer indie pop";
-  } else {
-    search = `${v} indie pop`;
-  }
-
-  const res = await fetch(`/api/music/search?q=${encodeURIComponent(search)}`);
-  const data = await res.json();
-  setResults(data.tracks || []);
-}
+  async function searchByVibe(v: string) {
+    setVibe(v);
 
     if (!v.trim()) {
       setResults([]);
       return;
     }
 
-    let search = v;
-    if (v.toLowerCase().includes("sad")) search += " sad indie";
-    if (v.toLowerCase().includes("night")) search += " night chill";
-    if (v.toLowerCase().includes("drive")) search += " driving";
-    if (v.toLowerCase().includes("happy")) search += " upbeat";
-    if (v.toLowerCase().includes("love")) search += " love song";
+    const lower = v.toLowerCase();
+    let search = "";
+
+    if (lower.includes("happy") || lower.includes("upbeat")) {
+      search = "feel good indie pop";
+    } else if (lower.includes("sad") || lower.includes("cry")) {
+      search = "sad indie acoustic";
+    } else if (lower.includes("night") || lower.includes("late")) {
+      search = "late night drive";
+    } else if (lower.includes("drive") || lower.includes("car")) {
+      search = "driving indie rock";
+    } else if (lower.includes("love") || lower.includes("romantic")) {
+      search = "romantic indie pop";
+    } else if (lower.includes("angry") || lower.includes("rage")) {
+      search = "angry rock";
+    } else if (lower.includes("chill") || lower.includes("calm")) {
+      search = "chill indie";
+    } else if (lower.includes("summer")) {
+      search = "summer indie pop";
+    } else {
+      search = `${v} indie pop`;
+    }
 
     const res = await fetch(`/api/music/search?q=${encodeURIComponent(search)}`);
     const data = await res.json();
@@ -162,9 +156,7 @@ export default function UploadPage() {
             <div className="mt-6 rounded-[24px] border border-dashed border-black/15 bg-[#faf8f4] p-6">
               <label className="block cursor-pointer rounded-[20px] border border-black/10 bg-white p-5 text-center">
                 <div className="text-[15px] font-medium">Choose cover image</div>
-                <div className="mt-2 text-sm text-black/50">
-                  JPG, PNG, WEBP
-                </div>
+                <div className="mt-2 text-sm text-black/50">JPG, PNG, WEBP — max 5MB</div>
                 <input
                   type="file"
                   accept="image/png,image/jpeg,image/webp"
@@ -225,7 +217,11 @@ export default function UploadPage() {
                     }}
                     className="flex w-full items-center gap-3 rounded-[18px] bg-white p-3 text-left hover:bg-black/5"
                   >
-                    <img src={track.albumArt} className="h-11 w-11 rounded-xl object-cover" />
+                    <img
+                      src={track.albumArt}
+                      alt=""
+                      className="h-11 w-11 rounded-xl object-cover"
+                    />
                     <div>
                       <div className="text-sm font-medium">{track.title}</div>
                       <div className="text-xs text-black/50">{track.artist}</div>
@@ -236,7 +232,11 @@ export default function UploadPage() {
 
               {selectedTrack && (
                 <div className="mt-4 flex items-center gap-3 rounded-[18px] bg-white p-3">
-                  <img src={selectedTrack.albumArt} className="h-12 w-12 rounded-xl object-cover" />
+                  <img
+                    src={selectedTrack.albumArt}
+                    alt=""
+                    className="h-12 w-12 rounded-xl object-cover"
+                  />
                   <div>
                     <div className="text-sm font-semibold">{selectedTrack.title}</div>
                     <div className="text-xs text-black/50">{selectedTrack.artist}</div>
@@ -263,7 +263,11 @@ export default function UploadPage() {
             <div className="mt-4 rounded-[24px] border border-black/10 bg-[#faf8f4] p-3">
               <div className="aspect-[9/16] overflow-hidden rounded-[22px] bg-[#e7e1d8]">
                 {imageUrl ? (
-                  <img src={imageUrl} alt="Preview" className="h-full w-full object-cover" />
+                  <img
+                    src={imageUrl}
+                    alt="Preview"
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <div className="flex h-full items-center justify-center text-sm text-black/35">
                     Your post preview will show here
@@ -288,10 +292,16 @@ export default function UploadPage() {
 
                 {selectedTrack ? (
                   <div className="mt-3 flex items-center gap-3 rounded-[16px] bg-[#faf8f4] p-3">
-                    <img src={selectedTrack.albumArt} className="h-10 w-10 rounded-lg object-cover" />
+                    <img
+                      src={selectedTrack.albumArt}
+                      alt=""
+                      className="h-10 w-10 rounded-lg object-cover"
+                    />
                     <div>
                       <div className="text-xs font-semibold">{selectedTrack.title}</div>
-                      <div className="text-[11px] text-black/50">{selectedTrack.artist}</div>
+                      <div className="text-[11px] text-black/50">
+                        {selectedTrack.artist}
+                      </div>
                     </div>
                   </div>
                 ) : null}
