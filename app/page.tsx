@@ -206,7 +206,7 @@ export default function Home() {
             +
           </button>
           <button
-            onClick={() => router.push("/friends")}
+            onClick={() => router.push("/search")}
             className="text-[#82766b] hover:text-[#111]"
           >
             Friends
