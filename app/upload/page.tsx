@@ -47,8 +47,42 @@ export default function UploadPage() {
     setResults(data.tracks || []);
   }
 
-  async function searchByVibe(v: string) {
-    setVibe(v);
+ async function searchByVibe(v: string) {
+  setVibe(v);
+
+  if (!v.trim()) {
+    setResults([]);
+    return;
+  }
+
+  const lower = v.toLowerCase();
+
+  let search = "";
+
+  if (lower.includes("happy") || lower.includes("upbeat")) {
+    search = "feel good indie pop";
+  } else if (lower.includes("sad") || lower.includes("cry")) {
+    search = "sad indie acoustic";
+  } else if (lower.includes("night") || lower.includes("late")) {
+    search = "late night drive";
+  } else if (lower.includes("drive") || lower.includes("car")) {
+    search = "driving indie rock";
+  } else if (lower.includes("love") || lower.includes("romantic")) {
+    search = "romantic indie pop";
+  } else if (lower.includes("angry") || lower.includes("rage")) {
+    search = "angry rock";
+  } else if (lower.includes("chill") || lower.includes("calm")) {
+    search = "chill indie";
+  } else if (lower.includes("summer")) {
+    search = "summer indie pop";
+  } else {
+    search = `${v} indie pop`;
+  }
+
+  const res = await fetch(`/api/music/search?q=${encodeURIComponent(search)}`);
+  const data = await res.json();
+  setResults(data.tracks || []);
+}
 
     if (!v.trim()) {
       setResults([]);
