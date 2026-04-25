@@ -194,7 +194,7 @@ export default function Home() {
             Home
           </button>
           <button
-            onClick={() => router.push("/explore")}
+            onClick={() => router.push("/search")}           
             className="text-[#82766b] hover:text-[#111]"
           >
             Explore
