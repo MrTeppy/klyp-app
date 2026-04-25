@@ -20,9 +20,7 @@ export default function UploadPage() {
 
     const filePath = `posts/${Date.now()}-${file.name}`;
 
-    const { error } = await supabase.storage
-      .from("images")
-      .upload(filePath, file);
+    const { error } = await supabase.storage.from("images").upload(filePath, file);
 
     if (error) {
       setStatus(error.message);
@@ -88,18 +86,22 @@ export default function UploadPage() {
 
   return (
     <main className="min-h-screen bg-[#f4efe6] text-[#171717]">
-      <div className="mx-auto max-w-2xl px-4 py-6">
+      <div className="mx-auto max-w-md px-4 py-6">
         <AppHeader subtitle="New Post" />
 
-        <div className="rounded-[32px] border border-black/10 bg-white p-6 shadow-sm">
+        <div className="rounded-[32px] border border-black/10 bg-white/90 p-5 shadow-sm">
+          
           {/* IMAGE */}
-          <label className="block cursor-pointer rounded-[20px] border border-black/10 bg-[#faf8f4] p-5 text-center">
-            <div className="text-[15px] font-medium">Upload image</div>
-            <input
-              type="file"
-              onChange={handleUpload}
-              className="hidden"
-            />
+          <label className="block cursor-pointer rounded-[24px] border border-dashed border-black/15 bg-[#faf8f4] p-6 text-center">
+            {imageUrl ? (
+              <img src={imageUrl} className="rounded-[20px]" />
+            ) : (
+              <>
+                <div className="text-lg font-medium">Add photo</div>
+                <div className="text-sm text-black/50">Tap to upload</div>
+              </>
+            )}
+            <input type="file" onChange={handleUpload} className="hidden" />
           </label>
 
           {/* CAPTION */}
@@ -107,70 +109,66 @@ export default function UploadPage() {
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             placeholder="your moment..."
-            className="mt-4 w-full rounded-xl border p-3"
+            className="mt-4 w-full rounded-2xl border p-4 font-serif text-lg"
           />
 
-          {/* MUSIC SEARCH */}
+          {/* MOOD */}
           <input
-            value={query}
-            onChange={(e) => searchSongs(e.target.value)}
-            placeholder="Search song..."
-            className="mt-4 w-full rounded-xl border p-3"
+            value={moodLine}
+            onChange={(e) => setMoodLine(e.target.value)}
+            placeholder="Mood line..."
+            className="mt-3 w-full rounded-xl border p-3"
           />
 
-          {/* RESULTS */}
-          <div className="mt-3 max-h-48 overflow-y-auto">
-            {results.map((track) => (
-              <div
-                key={track.id}
-                onClick={() => {
-                  setSelectedTrack(track);
-                  setResults([]);
-                  setQuery(track.title);
-                }}
-                className="flex cursor-pointer items-center gap-3 p-2 hover:bg-gray-100"
-              >
-                <img
-                  src={track.albumArt}
-                  className="h-10 w-10 rounded"
-                />
-                <div>
-                  <div className="text-sm">{track.title}</div>
-                  <div className="text-xs text-gray-500">
-                    {track.artist}
+          {/* MUSIC */}
+          <div className="mt-5">
+            <input
+              value={query}
+              onChange={(e) => searchSongs(e.target.value)}
+              placeholder="Search song..."
+              className="w-full rounded-xl border p-3"
+            />
+
+            <div className="mt-2 max-h-40 overflow-y-auto">
+              {results.map((track) => (
+                <div
+                  key={track.id}
+                  onClick={() => {
+                    setSelectedTrack(track);
+                    setResults([]);
+                    setQuery(track.title);
+                  }}
+                  className="flex cursor-pointer items-center gap-3 p-2 hover:bg-gray-100"
+                >
+                  <img src={track.albumArt} className="h-10 w-10 rounded" />
+                  <div>
+                    <div className="text-sm">{track.title}</div>
+                    <div className="text-xs text-gray-500">{track.artist}</div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* SELECTED SONG */}
-          {selectedTrack && (
-            <div className="mt-4 flex items-center gap-3 bg-[#faf8f4] p-3 rounded-xl">
-              <img
-                src={selectedTrack.albumArt}
-                className="h-12 w-12 rounded"
-              />
-              <div>
-                <div>{selectedTrack.title}</div>
-                <div className="text-sm text-gray-500">
-                  {selectedTrack.artist}
+            {selectedTrack && (
+              <div className="mt-3 flex items-center gap-3 bg-[#faf8f4] p-3 rounded-xl">
+                <img src={selectedTrack.albumArt} className="h-12 w-12 rounded" />
+                <div>
+                  <div>{selectedTrack.title}</div>
+                  <div className="text-sm text-gray-500">{selectedTrack.artist}</div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* POST */}
           <button
             onClick={handlePublish}
-            className="mt-6 w-full rounded-full bg-black py-3 text-white"
+            className="mt-6 w-full rounded-full bg-black py-4 text-white text-base"
           >
             Post
           </button>
 
-          {status && (
-            <p className="mt-3 text-sm text-black/60">{status}</p>
-          )}
+          {status && <p className="mt-3 text-sm">{status}</p>}
         </div>
       </div>
     </main>
