@@ -310,6 +310,9 @@ export default function UploadPage() {
           </aside>
         </div>
       </div>
+     <button className="klyp-button px-4 py-2 mt-4">
+  TEST BULGE
+</button>
     </main>
   );
 }
