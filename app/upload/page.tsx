@@ -1,10 +1,22 @@
 "use client";
 
-import AppHeader from "@/components/AppHeader";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+type Track = {
+  id: string;
+  title: string;
+  artist: string;
+  album?: string | null;
+  albumArt?: string | null;
+  previewUrl?: string | null;
+  externalUrl?: string | null;
+};
+
 export default function UploadPage() {
+  const router = useRouter();
+
   const [status, setStatus] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
@@ -12,8 +24,9 @@ export default function UploadPage() {
 
   const [query, setQuery] = useState("");
   const [vibe, setVibe] = useState("");
-  const [results, setResults] = useState<any[]>([]);
-  const [selectedTrack, setSelectedTrack] = useState<any | null>(null);
+  const [results, setResults] = useState<Track[]>([]);
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+  const [searching, setSearching] = useState(false);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -33,7 +46,9 @@ export default function UploadPage() {
       return;
     }
 
-    const filePath = `posts/${Date.now()}-${file.name}`;
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+    const filePath = `posts/${Date.now()}-${safeName}`;
+
     const { error } = await supabase.storage.from("images").upload(filePath, file);
 
     if (error) {
@@ -46,17 +61,28 @@ export default function UploadPage() {
     setStatus("Image uploaded.");
   }
 
-  async function searchSongs(q: string) {
-    setQuery(q);
-
-    if (!q.trim()) {
+  async function runSongSearch(search: string) {
+    if (!search.trim()) {
       setResults([]);
       return;
     }
 
-    const res = await fetch(`/api/music/search?q=${encodeURIComponent(q)}`);
-    const data = await res.json();
-    setResults(data.tracks || []);
+    setSearching(true);
+
+    try {
+      const res = await fetch(`/api/music/search?q=${encodeURIComponent(search)}`);
+      const data = await res.json();
+      setResults(data.tracks || []);
+    } catch {
+      setResults([]);
+    } finally {
+      setSearching(false);
+    }
+  }
+
+  async function searchSongs(q: string) {
+    setQuery(q);
+    await runSongSearch(q);
   }
 
   async function searchByVibe(v: string) {
@@ -87,19 +113,19 @@ export default function UploadPage() {
     } else if (lower.includes("summer")) {
       search = "summer indie pop";
     } else {
-      search = `${v} indie pop`;
+      search = `${v} indie`;
     }
 
-    const res = await fetch(`/api/music/search?q=${encodeURIComponent(search)}`);
-    const data = await res.json();
-    setResults(data.tracks || []);
+    await runSongSearch(search);
   }
 
   async function handlePublish() {
-    if (!imageUrl) {
-      setStatus("Upload an image first.");
+    if (!imageUrl && !caption.trim() && !selectedTrack) {
+      setStatus("Add a song, caption, or image first.");
       return;
     }
+
+    setStatus("Posting...");
 
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
@@ -111,9 +137,9 @@ export default function UploadPage() {
 
     const { error } = await supabase.from("posts").insert({
       user_id: user.id,
-      image_url: imageUrl,
-      caption,
-      mood_line: moodLine,
+      image_url: imageUrl || null,
+      caption: caption.trim() || null,
+      mood_line: moodLine.trim() || null,
       song_title: selectedTrack?.title || null,
       song_artist: selectedTrack?.artist || null,
       album_art: selectedTrack?.albumArt || null,
@@ -128,84 +154,92 @@ export default function UploadPage() {
       return;
     }
 
-    setStatus("Posted.");
-    setTimeout(() => {
-      window.location.href = "/feed";
-    }, 700);
+    router.push("/feed");
   }
 
   return (
-    <main className="min-h-screen bg-[#f4efe6] text-[#171717]">
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6">
-        <AppHeader subtitle="New Post" />
+    <main className="min-h-screen bg-[#dce8f4] text-[#333]">
+      <header className="border-b-2 border-[#1e4a80] bg-gradient-to-b from-[#5b8ecc] via-[#3d6fad] to-[#2f5c99] px-3 py-2">
+        <div className="mx-auto flex max-w-[900px] items-center justify-between">
+          <button onClick={() => router.push("/feed")} className="font-serif text-[30px] font-bold text-white drop-shadow">
+            <span className="text-[#a8caf0]">[</span>klyp<span className="text-[#a8caf0]">]</span>
+          </button>
+          <div className="text-right text-[11px] text-[#c8dff5]">
+            <div>new post</div>
+            <div className="text-[10px] text-[#a8c8f0]">what are you listening to?</div>
+          </div>
+        </div>
+      </header>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_430px]">
-          <section className="rounded-[32px] border border-black/10 bg-white/85 p-6 shadow-sm backdrop-blur">
-            <div className="text-[12px] uppercase tracking-[0.18em] text-black/35">
-              Composer
-            </div>
+      <nav className="border-b border-[#1e4270] bg-[#2f5c99] px-3 py-1">
+        <div className="mx-auto flex max-w-[900px] items-center text-[11px]">
+          <button onClick={() => router.push("/feed")} className="border-r border-[#3a6aaa] px-2 text-[#c8dff5] hover:text-white hover:underline">
+            home
+          </button>
+          <button className="border-r border-[#3a6aaa] px-2 font-bold text-white">
+            post song
+          </button>
+          <button onClick={() => router.push("/profile")} className="border-r border-[#3a6aaa] px-2 text-[#c8dff5] hover:text-white hover:underline">
+            profile
+          </button>
+        </div>
+      </nav>
 
-            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.05em]">
-              Build the moment properly
-            </h1>
+      <div className="mx-auto grid max-w-[900px] gap-2 px-2 py-2 md:grid-cols-[1fr_260px]">
+        <section className="border border-[#b0c8e0] bg-white">
+          <div className="bg-gradient-to-b from-[#6496c8] to-[#4878aa] px-2 py-1 text-[11px] font-bold text-white">
+            Post What You're Listening To
+          </div>
 
-            <p className="mt-3 max-w-xl text-[15px] leading-7 text-black/60">
-              Add the image, describe the mood, then choose the sound that fits it.
-            </p>
-
-            <div className="mt-6 rounded-[24px] border border-dashed border-black/15 bg-[#faf8f4] p-6">
-              <label className="block cursor-pointer rounded-[20px] border border-black/10 bg-white p-5 text-center">
-                <div className="text-[15px] font-medium">Choose cover image</div>
-                <div className="mt-2 text-sm text-black/50">JPG, PNG, WEBP — max 5MB</div>
-                <input
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  onChange={handleUpload}
-                  className="hidden"
-                />
+          <div className="space-y-3 p-3">
+            <div>
+              <label className="mb-1 block text-[11px] font-bold text-[#444]">
+                Caption
               </label>
-            </div>
-
-            <div className="mt-5">
-              <label className="mb-2 block text-sm text-black/55">Caption</label>
               <textarea
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                placeholder="city lights through scratched train glass"
-                className="min-h-[120px] w-full rounded-[22px] border border-black/10 bg-[#faf8f4] px-4 py-4 outline-none"
+                placeholder="can't stop playing this..."
+                className="min-h-[90px] w-full border border-[#8aacca] bg-[#f8fcff] px-2 py-2 text-[12px] outline-none"
               />
             </div>
 
-            <div className="mt-5">
-              <label className="mb-2 block text-sm text-black/55">Mood line</label>
+            <div>
+              <label className="mb-1 block text-[11px] font-bold text-[#444]">
+                Mood line
+              </label>
               <input
                 value={moodLine}
                 onChange={(e) => setMoodLine(e.target.value)}
-                placeholder="Late Train / City Lights"
-                className="w-full rounded-[18px] border border-black/10 bg-[#faf8f4] px-4 py-3 outline-none"
+                placeholder="late train / city lights"
+                className="w-full border border-[#8aacca] bg-[#f8fcff] px-2 py-2 text-[12px] outline-none"
               />
             </div>
 
-            <div className="mt-6 rounded-[24px] border border-black/10 bg-[#faf8f4] p-4">
-              <div className="text-[12px] uppercase tracking-[0.16em] text-black/35">
-                Sound
+            <div className="border border-[#b0c8e0] bg-[#f0f6fc] p-2">
+              <div className="mb-2 text-[11px] font-bold text-[#1a3a66]">
+                ♪ Add a track
               </div>
-
-              <input
-                value={vibe}
-                onChange={(e) => searchByVibe(e.target.value)}
-                placeholder="Describe a vibe, e.g. rainy night drive"
-                className="mt-4 w-full rounded-[18px] border border-black/10 bg-white px-4 py-3 outline-none"
-              />
 
               <input
                 value={query}
                 onChange={(e) => searchSongs(e.target.value)}
-                placeholder="Or search a song directly..."
-                className="mt-3 w-full rounded-[18px] border border-black/10 bg-white px-4 py-3 outline-none"
+                placeholder="search song directly, e.g. 505 Arctic Monkeys"
+                className="mb-2 w-full border border-[#8aacca] bg-white px-2 py-2 text-[12px] outline-none"
               />
 
-              <div className="mt-3 max-h-56 space-y-2 overflow-y-auto">
+              <input
+                value={vibe}
+                onChange={(e) => searchByVibe(e.target.value)}
+                placeholder="or describe a vibe, e.g. rainy night drive"
+                className="w-full border border-[#8aacca] bg-white px-2 py-2 text-[12px] outline-none"
+              />
+
+              {searching ? (
+                <div className="mt-2 text-[11px] text-[#557799]">searching...</div>
+              ) : null}
+
+              <div className="mt-2 max-h-64 space-y-1 overflow-y-auto">
                 {results.map((track) => (
                   <button
                     key={track.id}
@@ -215,104 +249,144 @@ export default function UploadPage() {
                       setQuery(track.title);
                       setResults([]);
                     }}
-                    className="flex w-full items-center gap-3 rounded-[18px] bg-white p-3 text-left hover:bg-black/5"
+                    className="flex w-full items-center gap-2 border border-[#dce8f5] bg-white p-2 text-left hover:bg-[#f8fcff]"
                   >
-                    <img
-                      src={track.albumArt}
-                      alt=""
-                      className="h-11 w-11 rounded-xl object-cover"
-                    />
-                    <div>
-                      <div className="text-sm font-medium">{track.title}</div>
-                      <div className="text-xs text-black/50">{track.artist}</div>
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-[#b0c8e0] bg-[#2f5c99] text-white">
+                      {track.albumArt ? (
+                        <img src={track.albumArt} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        "♪"
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[12px] font-bold text-[#1a3a66]">
+                        {track.title}
+                      </div>
+                      <div className="truncate text-[11px] text-[#557799]">
+                        {track.artist}
+                      </div>
                     </div>
                   </button>
                 ))}
               </div>
 
-              {selectedTrack && (
-                <div className="mt-4 flex items-center gap-3 rounded-[18px] bg-white p-3">
-                  <img
-                    src={selectedTrack.albumArt}
-                    alt=""
-                    className="h-12 w-12 rounded-xl object-cover"
-                  />
-                  <div>
-                    <div className="text-sm font-semibold">{selectedTrack.title}</div>
-                    <div className="text-xs text-black/50">{selectedTrack.artist}</div>
+              {selectedTrack ? (
+                <div className="mt-2 flex items-center gap-2 border border-[#b0c8e0] bg-white p-2">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-[#b0c8e0] bg-[#2f5c99] text-white">
+                    {selectedTrack.albumArt ? (
+                      <img src={selectedTrack.albumArt} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      "♪"
+                    )}
                   </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[12px] font-bold text-[#1a3a66]">
+                      {selectedTrack.title}
+                    </div>
+                    <div className="truncate text-[11px] text-[#557799]">
+                      {selectedTrack.artist}
+                    </div>
+                    {selectedTrack.previewUrl ? (
+                      <audio controls src={selectedTrack.previewUrl} className="mt-1 h-7 w-full" />
+                    ) : null}
+                  </div>
+                  <button
+                    onClick={() => setSelectedTrack(null)}
+                    className="border border-[#cc6666] px-2 py-1 text-[10px] text-[#660000]"
+                  >
+                    remove
+                  </button>
                 </div>
-              )}
+              ) : null}
             </div>
 
-            {status ? <p className="mt-4 text-sm text-black/55">{status}</p> : null}
+            <div className="border border-[#b0c8e0] bg-[#f8fcff] p-2">
+              <label className="block cursor-pointer border border-dashed border-[#8aacca] bg-white p-4 text-center">
+                <div className="text-[12px] font-bold text-[#1a3a66]">
+                  Choose image, optional
+                </div>
+                <div className="mt-1 text-[10px] text-[#557799]">
+                  JPG, PNG, WEBP — max 5MB
+                </div>
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={handleUpload}
+                  className="hidden"
+                />
+              </label>
 
-            <button
-              onClick={handlePublish}
-              className="mt-6 inline-flex items-center justify-center rounded-full bg-black px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
-            >
-              Publish Post
-            </button>
-          </section>
-
-          <aside className="rounded-[32px] border border-black/10 bg-white/85 p-5 shadow-sm backdrop-blur">
-            <div className="text-[12px] uppercase tracking-[0.16em] text-black/35">
-              Live Preview
+              {imageUrl ? (
+                <img src={imageUrl} alt="Preview" className="mt-2 max-h-[360px] w-full border border-[#b0c8e0] object-cover" />
+              ) : null}
             </div>
 
-            <div className="mt-4 rounded-[24px] border border-black/10 bg-[#faf8f4] p-3">
-              <div className="aspect-[9/16] overflow-hidden rounded-[22px] bg-[#e7e1d8]">
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-sm text-black/35">
-                    Your post preview will show here
-                  </div>
-                )}
+            {status ? (
+              <div className="border border-[#b0c8e0] bg-[#f0f6fc] px-2 py-2 text-[11px] text-[#557799]">
+                {status}
               </div>
+            ) : null}
 
-              <div className="mt-3 rounded-[18px] bg-white p-4">
-                <div className="text-[10px] uppercase tracking-[0.16em] text-black/35">
-                  Post
-                </div>
+            <div className="flex items-center justify-between border-t border-[#dce8f5] pt-3">
+              <button
+                onClick={() => router.push("/feed")}
+                className="border border-[#7aacca] bg-[#dce8f4] px-4 py-2 text-[11px] text-[#1a3a66]"
+              >
+                Cancel
+              </button>
 
-                <div className="mt-2 text-[14px] font-medium leading-6">
-                  {caption || "Your caption will appear here."}
-                </div>
+              <button
+                onClick={handlePublish}
+                className="border border-[#1e4a80] bg-[#2f5c99] px-5 py-2 text-[11px] font-bold text-white"
+              >
+                Publish Post
+              </button>
+            </div>
+          </div>
+        </section>
 
-                {moodLine ? (
-                  <div className="mt-3 rounded-full bg-[#faf8f4] px-3 py-2 text-[11px] text-black/55">
-                    {moodLine}
+        <aside className="border border-[#b0c8e0] bg-white">
+          <div className="bg-gradient-to-b from-[#6496c8] to-[#4878aa] px-2 py-1 text-[11px] font-bold text-white">
+            Live Preview
+          </div>
+
+          <div className="p-2">
+            <div className="border border-[#b0c8e0] bg-[#f0f6fc] p-2">
+              {selectedTrack ? (
+                <div className="mb-2 flex items-center gap-2 border border-[#b0c8e0] bg-white p-2">
+                  <div className="h-10 w-10 border border-[#b0c8e0] bg-[#2f5c99]">
+                    {selectedTrack.albumArt ? (
+                      <img src={selectedTrack.albumArt} alt="" className="h-full w-full object-cover" />
+                    ) : null}
                   </div>
-                ) : null}
-
-                {selectedTrack ? (
-                  <div className="mt-3 flex items-center gap-3 rounded-[16px] bg-[#faf8f4] p-3">
-                    <img
-                      src={selectedTrack.albumArt}
-                      alt=""
-                      className="h-10 w-10 rounded-lg object-cover"
-                    />
-                    <div>
-                      <div className="text-xs font-semibold">{selectedTrack.title}</div>
-                      <div className="text-[11px] text-black/50">
-                        {selectedTrack.artist}
-                      </div>
+                  <div className="min-w-0">
+                    <div className="truncate text-[12px] font-bold text-[#1a3a66]">
+                      {selectedTrack.title}
+                    </div>
+                    <div className="truncate text-[11px] text-[#557799]">
+                      {selectedTrack.artist}
                     </div>
                   </div>
-                ) : null}
+                </div>
+              ) : null}
+
+              {moodLine ? (
+                <div className="mb-2 border border-[#dce8f5] bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[#4878aa]">
+                  {moodLine}
+                </div>
+              ) : null}
+
+              <div className="whitespace-pre-line text-[12px] leading-5">
+                {caption || "Your post will appear here."}
               </div>
+
+              {imageUrl ? (
+                <img src={imageUrl} alt="" className="mt-2 w-full border border-[#b0c8e0]" />
+              ) : null}
             </div>
-          </aside>
-        </div>
+          </div>
+        </aside>
       </div>
-     <button className="klyp-button px-4 py-2 mt-4">
-  TEST BULGE
-</button>
     </main>
   );
 }
