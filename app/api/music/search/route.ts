@@ -4,19 +4,11 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q")?.trim();
 
-  if (!q) {
-    return NextResponse.json({ tracks: [] });
-  }
-
-  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
-    q
-  )}&media=music&entity=song&limit=12&country=GB`;
+  if (!q) return NextResponse.json({ tracks: [] });
 
   try {
-    const res = await fetch(url, {
-      next: { revalidate: 60 * 60 },
-    });
-
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=12&country=GB`;
+    const res = await fetch(url, { next: { revalidate: 3600 } });
     const data = await res.json();
 
     const tracks = (data.results || []).map((t: any) => ({
@@ -31,6 +23,6 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ tracks });
   } catch {
-    return NextResponse.json({ tracks: [] }, { status: 200 });
+    return NextResponse.json({ tracks: [] });
   }
 }

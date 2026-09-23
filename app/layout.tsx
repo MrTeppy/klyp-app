@@ -1,36 +1,38 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import BottomNav from "@/components/BottomNav"
 
 export const metadata: Metadata = {
-  title: "KLYP",
-  description: "Shared memory posts built around music.",
-  applicationName: "KLYP",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "KLYP",
-  },
+  title: "Klyp",
+  description: "music. memory. people who get it.",
+  applicationName: "Klyp",
+  manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/logo.svg",
-    apple: "/apple-touch-icon.png",
-  },
+    icon: [
+      { url: "/favicon.ico?v=99" },
+      { url: "/icon.png?v=99", sizes: "512x512", type: "image/png" },
+      { url: "/icon-192.png?v=99", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png?v=99", sizes: "512x512", type: "image/png" }
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png?v=99", sizes: "180x180", type: "image/png" }
+    ]
+  }
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f3ee",
+  themeColor: "#2f5c99",
+  width: "device-width",
+  initialScale: 1
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body>{children}
-        
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

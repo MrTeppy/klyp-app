@@ -1,127 +1,189 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { RetroBox, RetroButton, RetroShell, MiniAvatar } from "@/components/KlypRetro";
 import { supabase } from "@/lib/supabase";
 
 export default function ProfilePage() {
-  const router = useRouter();
   const [user, setUser] = useState<any>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [posts, setPosts] = useState<any[]>([]);
+  const [status, setStatus] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [music, setMusic] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user ?? null);
-      setLoaded(true);
-    });
+    load();
   }, []);
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/");
+  async function load() {
+    const { data } = await supabase.auth.getUser();
+    setUser(data.user);
+
+    if (!data.user) {
+      setStatus("Log in to edit your profile.");
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    if (profile) {
+      setDisplayName(profile.display_name || "");
+      setUsername(profile.username || "");
+      setBio(profile.bio || "");
+      setMusic(profile.music || "");
+      setAvatarUrl(profile.avatar_url || "");
+    } else {
+      setDisplayName(data.user.user_metadata?.display_name || data.user.email || "");
+      setUsername(data.user.user_metadata?.username || data.user.email?.split("@")[0] || "");
+    }
+
+    const { data: postData } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("user_id", data.user.id)
+      .order("created_at", { ascending: false });
+
+    setPosts(postData || []);
+  }
+
+  async function uploadAvatar(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setStatus("Only JPG, PNG, or WEBP images allowed.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setStatus("Profile picture must be under 5MB.");
+      return;
+    }
+
+    setStatus("Uploading profile picture...");
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+    const path = `${user.id}/${Date.now()}-${safeName}`;
+
+    const { error } = await supabase.storage.from("avatars").upload(path, file, {
+      upsert: true,
+    });
+
+    if (error) {
+      setStatus(error.message);
+      return;
+    }
+
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    setAvatarUrl(data.publicUrl);
+    setStatus("Profile picture uploaded. Press Save Profile.");
+  }
+
+  async function save() {
+    if (!user) return;
+
+    const cleanUsername = username.toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 24);
+
+    const { error } = await supabase.from("profiles").upsert({
+      id: user.id,
+      display_name: displayName,
+      username: cleanUsername,
+      bio,
+      music,
+      avatar_url: avatarUrl,
+      updated_at: new Date().toISOString(),
+    });
+
+    setStatus(error ? error.message : "Profile saved.");
   }
 
   return (
-    <main className="min-h-screen bg-[#f4efe8] text-[#111]">
-      <div className="mx-auto max-w-md px-4 pb-28 pt-5">
-
-        {/* Header */}
-        <header className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#111] text-2xl font-bold text-[#d7a96b] shadow-md">
-              K
-            </div>
-            <div className="tracking-[0.45em] text-lg font-semibold">KLYP</div>
-          </div>
-          {user && (
-            <button
-              onClick={handleLogout}
-              className="rounded-full border border-[#e0d6ca] bg-[#fffaf3] px-5 py-2 text-sm font-medium text-[#111] shadow-sm active:opacity-70"
-            >
-              Log Out
-            </button>
-          )}
-        </header>
-
-        {!loaded ? (
-          <div className="rounded-[28px] border border-[#e0d6ca] bg-[#fffaf3] p-6">
-            <p className="text-sm text-[#82766b]">Loading…</p>
-          </div>
-        ) : user ? (
-          <div className="space-y-4">
-            {/* Avatar + name */}
-            <div className="rounded-[28px] border border-[#e0d6ca] bg-[#fffaf3] p-6 shadow-[0_12px_35px_rgba(55,39,20,0.08)]">
-              <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-full bg-gradient-to-br from-[#d7a96b] to-[#111]" />
-                <div>
-                  <p className="text-lg font-semibold">{user.email?.split("@")[0]}</p>
-                  <p className="text-sm text-[#82766b]">{user.email}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-                <div className="rounded-[20px] bg-[#f4efe8] p-3">
-                  <div className="text-xl font-semibold">12</div>
-                  <div className="text-xs text-[#82766b]">Posts</div>
-                </div>
-                <div className="rounded-[20px] bg-[#f4efe8] p-3">
-                  <div className="text-xl font-semibold">48</div>
-                  <div className="text-xs text-[#82766b]">Friends</div>
-                </div>
-                <div className="rounded-[20px] bg-[#f4efe8] p-3">
-                  <div className="text-xl font-semibold">31</div>
-                  <div className="text-xs text-[#82766b]">Klyps</div>
-                </div>
-              </div>
+    <RetroShell title="My Profile" subtitle="old-school profile page">
+      <div className="grid gap-2 md:grid-cols-[180px_1fr_240px]">
+        <aside>
+          <RetroBox title="Picture">
+            <div className="mb-2">
+              <MiniAvatar
+                label={displayName || username || "ME"}
+                src={avatarUrl}
+                size="lg"
+              />
             </div>
 
-            {/* Settings */}
-            <div className="rounded-[28px] border border-[#e0d6ca] bg-[#fffaf3] p-5 shadow-[0_12px_35px_rgba(55,39,20,0.08)]">
-              <p className="text-[12px] uppercase tracking-[0.16em] text-[#82766b]">Settings</p>
+            <label className="mb-2 block cursor-pointer border border-[#7aacca] bg-gradient-to-b from-[#f0f6fc] to-[#dce8f4] px-3 py-1 text-center text-[11px] text-[#1a3a66]">
+              Change picture
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                onChange={uploadAvatar}
+                className="hidden"
+              />
+            </label>
+            <RetroButton onClick={save} primary>Save Profile</RetroButton>
+            {status ? <div className="mt-2 text-[11px] text-[#557799]">{status}</div> : null}
+          </RetroBox>
+        </aside>
 
-              {[
-                { label: "Spotify", sub: "Connect your listening" },
-                { label: "Privacy", sub: "Friends can Klyp your posts" },
-                { label: "Sound Preferences", sub: "Music-first posts enabled" },
-              ].map((item) => (
-                <div key={item.label} className="mt-3 flex items-center justify-between rounded-[20px] bg-[#f4efe8] p-4">
+        <section>
+          <RetroBox title="Edit Profile">
+            {!user ? (
+              <div>Log in to edit your profile.</div>
+            ) : (
+              <>
+                <label className="mb-1 block text-[11px] font-bold">Display name</label>
+                <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} className="mb-2 w-full border border-[#8aacca] bg-[#f8fcff] px-2 py-2 text-[12px]" />
+
+                <label className="mb-1 block text-[11px] font-bold">Username</label>
+                <input value={username} onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))} className="mb-2 w-full border border-[#8aacca] bg-[#f8fcff] px-2 py-2 text-[12px]" />
+
+                <label className="mb-1 block text-[11px] font-bold">Favourite music</label>
+                <input value={music} onChange={(e) => setMusic(e.target.value)} placeholder="Blur, Mac Miller, Radiohead..." className="mb-2 w-full border border-[#8aacca] bg-[#f8fcff] px-2 py-2 text-[12px]" />
+
+                <label className="mb-1 block text-[11px] font-bold">About me</label>
+                <textarea value={bio} onChange={(e) => setBio(e.target.value)} className="min-h-[90px] w-full border border-[#8aacca] bg-[#f8fcff] px-2 py-2 text-[12px]" />
+              </>
+            )}
+          </RetroBox>
+
+          <RetroBox title={`My Posts (${posts.length})`}>
+            {posts.length === 0 ? <div className="text-[#888]">no posts yet</div> : null}
+            {posts.map((p) => (
+              <div key={p.id} className="mb-2 border-b border-[#dce8f5] pb-2">
+                <div className="flex gap-2">
+                  <MiniAvatar label={displayName || username || "ME"} />
                   <div>
-                    <div className="text-[15px] font-medium">{item.label}</div>
-                    <div className="text-xs text-[#82766b]">{item.sub}</div>
+                    <div className="text-[12px] font-bold text-[#1a4a99]">{displayName || username || "me"}</div>
+                    {p.song_title ? <div className="text-[11px] text-[#557799]">♪ {p.song_title} — {p.song_artist}</div> : null}
+                    {p.caption ? <div className="mt-1 whitespace-pre-line text-[12px]">{p.caption}</div> : null}
                   </div>
-                  <button
-                    onClick={() => item.label === "Spotify" ? router.push("/spotify") : null}
-                    className="rounded-full border border-[#e0d6ca] bg-white px-4 py-2 text-xs text-[#82766b] active:opacity-70"
-                  >
-                    Manage
-                  </button>
                 </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="rounded-[28px] border border-[#e0d6ca] bg-[#fffaf3] p-6 shadow-[0_12px_35px_rgba(55,39,20,0.08)]">
-            <h1 className="text-2xl font-semibold">Not logged in</h1>
-            <p className="mt-2 text-sm text-[#82766b]">Log in to see your profile.</p>
-            <div className="mt-5 flex gap-3">
-              <Link href="/login" className="rounded-full bg-[#111] px-5 py-2 text-sm text-white">Log In</Link>
-              <Link href="/signup" className="rounded-full border border-[#e0d6ca] bg-white px-5 py-2 text-sm text-[#111]">Sign Up</Link>
-            </div>
-          </div>
-        )}
-      </div>
+              </div>
+            ))}
+          </RetroBox>
+        </section>
 
-      {/* Bottom nav */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-[#ded2c5] bg-[#fffaf3]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-md justify-around px-6 py-4 text-sm">
-          <button onClick={() => router.push("/")} className="text-[#82766b]">Home</button>
-          <button onClick={() => router.push("/search")} className="text-[#82766b]">Explore</button>
-          <button onClick={() => router.push("/upload")} className="rounded-full bg-[#111] px-5 py-2 text-white active:opacity-70">+</button>
-          <button onClick={() => router.push("/feed")} className="text-[#82766b]">Feed</button>
-          <button className="font-medium text-[#111]">Profile</button>
-        </div>
+        <aside>
+          <RetroBox title="Information">
+            <table className="w-full text-[11px]">
+              <tbody>
+                <tr><td className="bg-[#dce8f5] p-1 font-bold text-[#2a5080]" colSpan={2}>Account Info:</td></tr>
+                <tr><td className="p-1 text-[#666]">Username:</td><td className="p-1">@{username || "—"}</td></tr>
+                <tr><td className="bg-[#dce8f5] p-1 font-bold text-[#2a5080]" colSpan={2}>Personal Info:</td></tr>
+                <tr><td className="p-1 text-[#666]">Music:</td><td className="p-1">{music || "—"}</td></tr>
+                <tr><td className="p-1 text-[#666]">About:</td><td className="p-1">{bio || "—"}</td></tr>
+              </tbody>
+            </table>
+          </RetroBox>
+        </aside>
       </div>
-    </main>
+    </RetroShell>
   );
 }
