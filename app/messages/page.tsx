@@ -74,9 +74,14 @@ export default function MessagesPage() {
       return;
     }
 
-    const urlTo =
+    const rawUrlTo =
       typeof window !== "undefined"
         ? new URLSearchParams(window.location.search).get("to")
+        : null;
+
+    const urlTo =
+      rawUrlTo && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(rawUrlTo)
+        ? rawUrlTo
         : null;
 
     const { data: friendships } = await supabase

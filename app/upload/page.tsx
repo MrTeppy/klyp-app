@@ -29,17 +29,41 @@ export default function UploadPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setStatus("Uploading image...");
-
-    const filePath = `posts/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`;
-    const { error } = await supabase.storage.from("images").upload(filePath, file);
-
-    if (error) {
-      setStatus(error.message);
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setStatus("Only JPG, PNG, or WEBP images allowed.");
       return;
     }
 
-    const { data } = supabase.storage.from("images").getPublicUrl(filePath);
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setStatus("Image must be under 5MB.");
+      return;
+    }
+
+    setStatus("Uploading image...");
+
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData.user;
+
+    if (!user) {
+      setStatus("Log in first.");
+      router.push("/login");
+      return;
+    }
+
+    const extension =
+      file.type === "image/png"
+        ? "png"
+        : file.type === "image/webp"
+          ? "webp"
+          : "jpg";
+
+    const filePath = `posts/${user.id}/${crypto.randomUUID()}.${extension}`;
+
+    const { error } = await supabase.storage.from("Pictures").upload(filePath, file);
+
+    const { data } = supabase.storage.from("Pictures").getPublicUrl(filePath);
     setImageUrl(data.publicUrl);
     setStatus("Image uploaded.");
   }

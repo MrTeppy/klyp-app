@@ -43,16 +43,17 @@ export default function AddToKlypPage({
       return;
     }
 
-    const path = `klyp/${Date.now()}-${file.name}`;
+    const extension = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+    const path = `klyp/${user.id}/${crypto.randomUUID()}.${extension}`;
 
-    const { error } = await supabase.storage.from("images").upload(path, file);
+    const { error } = await supabase.storage.from("Pictures").upload(path, file);
 
     if (error) {
       setStatus(error.message);
       return;
     }
 
-    const { data } = supabase.storage.from("images").getPublicUrl(path);
+    const { data } = supabase.storage.from("Pictures").getPublicUrl(path);
 
     const { error: insertError } = await supabase.from("klyp_items").insert({
       post_slug: postSlug,
