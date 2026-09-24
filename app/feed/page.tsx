@@ -81,10 +81,93 @@ function Play({ src }: { src?: string | null }) {
       onClick={toggle}
       disabled={!src}
       className="klyp-button"
-      aria-label={playing ? "Pause preview" : "Play preview"}
     >
-      {playing ? "❚❚" : "▶ PLAY"}
+      {playing ? "❚❚ PAUSE" : "▶ PLAY"}
     </button>
+  );
+}
+
+function Equalizer() {
+  return (
+    <div className="equalizer" aria-hidden="true">
+      <i style={{ height: "5px" }} />
+      <i style={{ height: "11px" }} />
+      <i style={{ height: "18px" }} />
+      <i style={{ height: "9px" }} />
+      <i style={{ height: "23px" }} />
+      <i style={{ height: "14px" }} />
+      <i style={{ height: "27px" }} />
+      <i style={{ height: "10px" }} />
+      <i style={{ height: "20px" }} />
+      <i style={{ height: "7px" }} />
+      <i style={{ height: "15px" }} />
+      <i style={{ height: "24px" }} />
+      <i style={{ height: "12px" }} />
+      <i style={{ height: "19px" }} />
+      <i style={{ height: "8px" }} />
+    </div>
+  );
+}
+
+function StereoDisplay({ post }: { post?: Post }) {
+  return (
+    <div className="stereo">
+      <div className="stereo-top">
+        <span>KLYP PLAYER</span>
+        <span>● STEREO</span>
+      </div>
+
+      <div className="stereo-screen">
+        <div className="screen-line">
+          <span>MP3</span>
+          <span>DISC 01</span>
+          <span>TRACK 01</span>
+        </div>
+
+        <div className="screen-main">
+          <div className="pixel-wave">
+            <span>~</span>
+            <span>~</span>
+            <span>~</span>
+            <span>~</span>
+            <span>~</span>
+            <span>~</span>
+            <span>~</span>
+            <span>~</span>
+          </div>
+
+          <div className="dolphin">
+            {">)))°>"}
+          </div>
+
+          <div className="screen-song">
+            {post?.song_title || "KLYP RADIO"}
+          </div>
+
+          <div className="screen-artist">
+            {post?.song_artist || "MUSIC FOR YOUR PEOPLE"}
+          </div>
+
+          <Equalizer />
+        </div>
+
+        <div className="screen-bottom">
+          <span>VOL 18</span>
+          <span>♫</span>
+          <span>EQ ROCK</span>
+          <span>01:42</span>
+        </div>
+      </div>
+
+      <div className="stereo-controls">
+        <span className="led red" />
+        <button>◀◀</button>
+        <button>▶</button>
+        <button>■</button>
+        <button>▶▶</button>
+        <span className="led green" />
+      </div>
+    </div>
   );
 }
 
@@ -95,7 +178,7 @@ function MusicPlayer({ post }: { post: Post }) {
     <div className="music-player">
       <div className="music-top">
         <span>♫ KLYP MUSIC</span>
-        <span>NOW PLAYING</span>
+        <span>MP3 READY</span>
       </div>
 
       <div className="music-content">
@@ -234,13 +317,13 @@ export default function FeedPage() {
         .klyp-page {
           min-height: 100vh;
           background:
-            radial-gradient(circle at 20% 10%, rgba(255,255,255,.9), transparent 25%),
+            radial-gradient(circle at 20% 10%, rgba(255,255,255,.85), transparent 25%),
             repeating-linear-gradient(
               0deg,
-              #d5e7f4 0px,
-              #d5e7f4 2px,
-              #cbdfee 2px,
-              #cbdfee 4px
+              #d4e6f2 0px,
+              #d4e6f2 2px,
+              #c9ddea 2px,
+              #c9ddea 4px
             );
           color: #111;
           font-family: Arial, Helvetica, sans-serif;
@@ -259,7 +342,7 @@ export default function FeedPage() {
 
         .top-ad {
           height: 18px;
-          background: #efefef;
+          background: #e9e9e9;
           border-bottom: 1px solid #aaa;
           color: #777;
           font-size: 9px;
@@ -269,26 +352,45 @@ export default function FeedPage() {
 
         .masthead {
           position: relative;
-          min-height: 116px;
+          min-height: 128px;
           overflow: hidden;
           background:
-            linear-gradient(135deg, #003d80 0%, #0074c8 48%, #08a7c8 100%);
-          border-bottom: 4px solid #ffcf00;
-          padding: 18px 20px;
+            linear-gradient(
+              135deg,
+              #001f48 0%,
+              #004e91 42%,
+              #008dc1 72%,
+              #006d9d 100%
+            );
+          border-bottom: 4px solid #ffd200;
+          padding: 17px 20px;
+        }
+
+        .masthead:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 12px;
+          height: 1px;
+          background: rgba(95,232,255,.6);
+          box-shadow:
+            0 4px 0 rgba(95,232,255,.22),
+            0 8px 0 rgba(95,232,255,.12);
         }
 
         .masthead:after {
           content: "";
           position: absolute;
-          width: 240px;
-          height: 240px;
-          right: -50px;
-          top: -100px;
+          width: 270px;
+          height: 270px;
+          right: -55px;
+          top: -105px;
           border-radius: 50%;
-          border: 28px solid rgba(255,255,255,.14);
+          border: 28px solid rgba(255,255,255,.12);
           box-shadow:
-            0 0 0 15px rgba(255,255,255,.07),
-            0 0 0 35px rgba(255,255,255,.05);
+            0 0 0 14px rgba(255,255,255,.06),
+            0 0 0 32px rgba(255,255,255,.04);
         }
 
         .logo {
@@ -296,39 +398,51 @@ export default function FeedPage() {
           z-index: 2;
           display: inline-block;
           color: #fff;
-          font-size: 62px;
+          font-size: 64px;
           line-height: .8;
           font-weight: 900;
           letter-spacing: -7px;
           text-shadow:
-            3px 3px 0 #002b5b,
-            6px 6px 0 rgba(0,0,0,.15);
+            3px 3px 0 #001c3b,
+            6px 6px 0 rgba(0,0,0,.18);
           cursor: pointer;
         }
 
         .tagline {
           position: relative;
           z-index: 2;
-          margin-top: 12px;
-          color: #fff;
-          font-size: 11px;
+          margin-top: 13px;
+          color: #b9f4ff;
+          font-size: 10px;
           font-weight: bold;
-          letter-spacing: 1px;
+          letter-spacing: 1.4px;
           text-transform: uppercase;
         }
 
         .top-links {
           position: relative;
           z-index: 3;
-          margin-top: 7px;
+          margin-top: 8px;
           font-size: 10px;
         }
 
         .top-links button {
           color: #fff;
           text-decoration: underline;
-          margin-right: 12px;
+          margin-right: 13px;
           font-weight: bold;
+        }
+
+        .display-code {
+          position: absolute;
+          right: 18px;
+          bottom: 14px;
+          z-index: 4;
+          color: #82f6ff;
+          font-family: "Courier New", monospace;
+          font-size: 8px;
+          text-align: right;
+          letter-spacing: 1px;
         }
 
         .main-nav {
@@ -372,7 +486,7 @@ export default function FeedPage() {
 
         .layout {
           display: grid;
-          grid-template-columns: 165px minmax(0, 1fr) 190px;
+          grid-template-columns: 165px minmax(0, 1fr) 205px;
           gap: 9px;
           padding: 9px;
           background: #f7f7f7;
@@ -391,8 +505,7 @@ export default function FeedPage() {
           font-weight: 900;
           letter-spacing: .5px;
           text-transform: uppercase;
-          background:
-            linear-gradient(#2383c4, #07538d);
+          background: linear-gradient(#2383c4, #07538d);
           border-bottom: 2px solid #003c6c;
           text-shadow: 1px 1px 0 #00375f;
         }
@@ -422,23 +535,6 @@ export default function FeedPage() {
           color: #526b7d;
           font-size: 10px;
           line-height: 1.5;
-        }
-
-        .friend {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-          border-bottom: 1px dotted #bbb;
-          padding: 5px 0;
-          color: #004c99;
-          font-size: 10px;
-        }
-
-        .friend-dot {
-          width: 7px;
-          height: 7px;
-          border: 1px solid #176d18;
-          background: #36c43a;
         }
 
         .welcome {
@@ -561,6 +657,156 @@ export default function FeedPage() {
           text-decoration: underline;
         }
 
+        /* 2000s stereo / LCD player */
+
+        .stereo {
+          margin-bottom: 9px;
+          border: 2px solid #0b3153;
+          background: #142a3b;
+          box-shadow:
+            inset 0 0 0 1px #41627a,
+            3px 3px 0 #a8bac6;
+        }
+
+        .stereo-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 4px 7px;
+          background: linear-gradient(#304b60, #172c3e);
+          color: #b9eaff;
+          font-family: "Courier New", monospace;
+          font-size: 8px;
+          font-weight: bold;
+          letter-spacing: 1px;
+        }
+
+        .stereo-screen {
+          margin: 6px;
+          padding: 6px;
+          background:
+            repeating-linear-gradient(
+              0deg,
+              rgba(0,0,0,.08),
+              rgba(0,0,0,.08) 1px,
+              transparent 1px,
+              transparent 3px
+            ),
+            #052d3a;
+          border: 2px inset #69808e;
+          color: #68f6ff;
+          font-family: "Courier New", monospace;
+          box-shadow:
+            inset 0 0 12px rgba(0,255,255,.15);
+        }
+
+        .screen-line,
+        .screen-bottom {
+          display: flex;
+          justify-content: space-between;
+          gap: 5px;
+          font-size: 7px;
+          color: #48cbd4;
+        }
+
+        .screen-main {
+          min-height: 112px;
+          padding: 5px 2px;
+          text-align: center;
+        }
+
+        .pixel-wave {
+          color: #38c9d2;
+          font-size: 13px;
+          letter-spacing: 4px;
+          opacity: .7;
+          height: 17px;
+        }
+
+        .dolphin {
+          margin-top: 1px;
+          color: #9affff;
+          font-size: 17px;
+          font-weight: bold;
+          letter-spacing: 2px;
+          text-shadow: 0 0 5px #22d8ff;
+        }
+
+        .screen-song {
+          margin-top: 7px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          color: #a7ffff;
+          font-size: 11px;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+
+        .screen-artist {
+          margin-top: 2px;
+          color: #48b9c2;
+          font-size: 8px;
+          text-transform: uppercase;
+        }
+
+        .equalizer {
+          display: flex;
+          justify-content: center;
+          align-items: end;
+          gap: 2px;
+          height: 30px;
+          margin-top: 6px;
+        }
+
+        .equalizer i {
+          display: block;
+          width: 5px;
+          background: #65f8ff;
+          box-shadow: 0 0 4px rgba(61,238,255,.7);
+        }
+
+        .stereo-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          padding: 4px 5px 6px;
+        }
+
+        .stereo-controls button {
+          min-width: 27px;
+          border: 2px outset #637b8c;
+          background: #344b5c;
+          color: #d8edf7;
+          padding: 3px;
+          font-family: "Courier New", monospace;
+          font-size: 8px;
+        }
+
+        .stereo-controls button:active {
+          border-style: inset;
+        }
+
+        .led {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          display: inline-block;
+          margin: 0 3px;
+          box-shadow: 0 0 5px currentColor;
+        }
+
+        .led.red {
+          background: #ff3030;
+          color: #ff3030;
+        }
+
+        .led.green {
+          background: #42e85c;
+          color: #42e85c;
+        }
+
         .music-player {
           border: 2px solid #285f8d;
           background: #e7f0f7;
@@ -671,20 +917,6 @@ export default function FeedPage() {
           box-shadow: 3px 3px 0 #b2c1cb;
         }
 
-        .now-playing-placeholder {
-          width: 130px;
-          height: 130px;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #d9e7f0;
-          border: 3px solid #fff;
-          outline: 1px solid #57758b;
-          color: #24587e;
-          font-size: 45px;
-        }
-
         .now-title {
           margin-top: 8px;
           color: #003f7d;
@@ -755,30 +987,24 @@ export default function FeedPage() {
             grid-template-columns: 1fr;
           }
 
-          .left-column,
-          .right-column {
-            display: block;
-          }
-
           .logo {
             font-size: 48px;
           }
-        }
 
-        @media (min-width: 801px) {
-          .left-column,
-          .right-column {
-            display: block;
+          .display-code {
+            display: none;
           }
         }
       `}</style>
 
       <div className="klyp-site">
+
         <div className="top-ad">
           klyp.life &nbsp; | &nbsp; welcome to the internet
         </div>
 
         <header className="masthead">
+
           <button
             onClick={() => router.push("/")}
             className="logo"
@@ -807,9 +1033,19 @@ export default function FeedPage() {
               search
             </button>
           </div>
+
+          <div className="display-code">
+            KLYP v2.04
+            <br />
+            DIGITAL AUDIO SYSTEM
+            <br />
+            ONLINE ●
+          </div>
+
         </header>
 
         <nav className="main-nav">
+
           <button onClick={() => router.push("/feed")}>
             home
           </button>
@@ -833,23 +1069,26 @@ export default function FeedPage() {
           <button onClick={() => router.push("/upload")}>
             + make a klyp
           </button>
+
         </nav>
 
         <div className="ticker">
           <strong>NEWS:</strong>
-          post a song. post a photo. tell people what you're listening to.
+          new music. new photos. new memories.
         </div>
 
         <div className="layout">
-          {/* LEFT */}
-          <aside className="left-column">
+
+          {/* LEFT COLUMN */}
+
+          <aside>
+
             <div className="column-box">
               <SectionTitle>My Klyp</SectionTitle>
 
               <div className="box-content">
-                <div className="side-link">
-                  <MiniAvatar />
-                </div>
+
+                <MiniAvatar />
 
                 <button
                   onClick={() => router.push("/profile")}
@@ -878,6 +1117,7 @@ export default function FeedPage() {
                 >
                   make a new klyp
                 </button>
+
               </div>
             </div>
 
@@ -885,6 +1125,7 @@ export default function FeedPage() {
               <SectionTitle>Quick Links</SectionTitle>
 
               <div className="box-content">
+
                 <button
                   onClick={() => router.push("/search")}
                   className="side-link"
@@ -896,7 +1137,7 @@ export default function FeedPage() {
                   onClick={() => router.push("/friends")}
                   className="side-link"
                 >
-                  → friends
+                  → my friends
                 </button>
 
                 <button
@@ -912,6 +1153,7 @@ export default function FeedPage() {
                 >
                   → post music
                 </button>
+
               </div>
             </div>
 
@@ -944,16 +1186,21 @@ export default function FeedPage() {
               <br />
               you like the song.
             </div>
+
           </aside>
 
           {/* CENTRE */}
+
           <section>
+
             <div className="welcome">
+
               <SectionTitle>
                 KLYP / HOME / WHAT'S NEW
               </SectionTitle>
 
               <div className="welcome-inner">
+
                 <div className="welcome-title">
                   what are you listening to?
                 </div>
@@ -968,20 +1215,30 @@ export default function FeedPage() {
                 >
                   + MAKE A NEW KLYP
                 </button>
+
               </div>
+
             </div>
+
+            <StereoDisplay post={latestTrack} />
 
             {status ? (
               <div className="column-box">
-                <div className="loading">{status}</div>
+                <div className="loading">
+                  {status}
+                </div>
               </div>
             ) : null}
 
             {!status && posts.length === 0 ? (
               <div className="column-box">
-                <SectionTitle>Nothing Here Yet</SectionTitle>
+
+                <SectionTitle>
+                  Nothing Here Yet
+                </SectionTitle>
 
                 <div className="box-content">
+
                   <div className="side-copy">
                     Your feed is completely empty.
                     <br />
@@ -995,21 +1252,33 @@ export default function FeedPage() {
                   >
                     POST SOMETHING
                   </button>
+
                 </div>
+
               </div>
             ) : null}
 
             {posts.map((post, index) => {
-              const name = nameFromPost(post, profiles);
+
+              const name = nameFromPost(
+                post,
+                profiles
+              );
 
               return (
-                <article key={post.id} className="post">
+                <article
+                  key={post.id}
+                  className="post"
+                >
+
                   <div className="post-head">
+
                     <div className="post-avatar">
                       <MiniAvatar label={name} />
                     </div>
 
                     <div className="post-meta">
+
                       <button className="post-name">
                         {name}
                       </button>
@@ -1023,10 +1292,13 @@ export default function FeedPage() {
                           {post.mood_line}
                         </div>
                       ) : null}
+
                     </div>
+
                   </div>
 
                   <div className="post-body">
+
                     {post.caption ? (
                       <div className="post-caption">
                         {post.caption}
@@ -1055,9 +1327,11 @@ export default function FeedPage() {
                         ★ newest klyp
                       </div>
                     ) : null}
+
                   </div>
 
                   <div className="post-footer">
+
                     <button>♡ like</button>
 
                     <button>comment</button>
@@ -1068,25 +1342,37 @@ export default function FeedPage() {
                       {post.created_at
                         ? new Date(
                             post.created_at
-                          ).toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                          })
+                          ).toLocaleDateString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )
                         : ""}
                     </span>
+
                   </div>
+
                 </article>
               );
             })}
+
           </section>
 
-          {/* RIGHT */}
-          <aside className="right-column">
+          {/* RIGHT COLUMN */}
+
+          <aside>
+
             <div className="now-playing">
-              <SectionTitle>Now Playing</SectionTitle>
+
+              <SectionTitle>
+                Now Playing
+              </SectionTitle>
 
               <div className="now-playing-inner">
+
                 {latestTrack ? (
                   <>
                     {latestTrack.album_art ? (
@@ -1096,7 +1382,17 @@ export default function FeedPage() {
                         className="now-playing-art"
                       />
                     ) : (
-                      <div className="now-playing-placeholder">
+                      <div
+                        className="now-playing-art"
+                        style={{
+                          background: "#c8dce8",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "40px",
+                          color: "#24587e",
+                        }}
+                      >
                         ♫
                       </div>
                     )}
@@ -1110,7 +1406,9 @@ export default function FeedPage() {
                     </div>
 
                     <div className="now-button">
-                      <Play src={latestTrack.preview_url} />
+                      <Play
+                        src={latestTrack.preview_url}
+                      />
                     </div>
                   </>
                 ) : (
@@ -1118,6 +1416,7 @@ export default function FeedPage() {
                     Nobody has posted a song yet.
                     <br />
                     <br />
+
                     <button
                       onClick={() => router.push("/upload")}
                       className="side-link"
@@ -1126,40 +1425,65 @@ export default function FeedPage() {
                     </button>
                   </div>
                 )}
+
               </div>
+
             </div>
 
             <div className="column-box">
-              <SectionTitle>Klyp Stats</SectionTitle>
+
+              <SectionTitle>
+                Klyp Stats
+              </SectionTitle>
 
               <div className="box-content">
+
                 <div className="stat">
-                  <span className="stat-label">klyps</span>
+                  <span className="stat-label">
+                    klyps
+                  </span>
+
                   <span className="stat-value">
                     {posts.length}
                   </span>
                 </div>
 
                 <div className="stat">
-                  <span className="stat-label">latest</span>
+                  <span className="stat-label">
+                    music
+                  </span>
+
                   <span className="stat-value">
-                    {posts.length ? "today" : "—"}
+                    {
+                      posts.filter(
+                        (p) => p.song_title
+                      ).length
+                    }
                   </span>
                 </div>
 
                 <div className="stat">
-                  <span className="stat-label">music</span>
+                  <span className="stat-label">
+                    system
+                  </span>
+
                   <span className="stat-value">
-                    {posts.filter((p) => p.song_title).length}
+                    ONLINE
                   </span>
                 </div>
+
               </div>
+
             </div>
 
             <div className="column-box">
-              <SectionTitle>People</SectionTitle>
+
+              <SectionTitle>
+                People
+              </SectionTitle>
 
               <div className="box-content">
+
                 <button
                   onClick={() => router.push("/search")}
                   className="side-link"
@@ -1180,29 +1504,65 @@ export default function FeedPage() {
                 >
                   send a message
                 </button>
+
               </div>
+
             </div>
 
             <div className="column-box">
-              <SectionTitle>Did You Know?</SectionTitle>
+
+              <SectionTitle>
+                Klyp Radio
+              </SectionTitle>
 
               <div className="box-content">
+
                 <div className="side-copy">
-                  You can put a song on a Klyp
+                  <strong>
+                    102.7 KLYP FM
+                  </strong>
+
                   <br />
-                  and let people hear a
                   <br />
-                  30 second preview.
+
+                  music from the people
+                  <br />
+                  on the internet.
+
                   <br />
                   <br />
-                  Try it.
+
+                  <span
+                    style={{
+                      color: "#008f9c",
+                      fontFamily:
+                        '"Courier New", monospace',
+                      fontSize: "9px",
+                    }}
+                  >
+                    ● BROADCASTING
+                  </span>
                 </div>
+
               </div>
+
             </div>
+
+            <div className="banner">
+              <strong>BEST VIEWED</strong>
+              <br />
+              <br />
+              WITH MUSIC
+              <br />
+              PLAYING.
+            </div>
+
           </aside>
+
         </div>
 
         <footer className="footer">
+
           <div>
             <strong>KLYP.LIFE</strong>
             {" · "}
@@ -1210,6 +1570,7 @@ export default function FeedPage() {
           </div>
 
           <div style={{ marginTop: "5px" }}>
+
             <button onClick={() => router.push("/feed")}>
               home
             </button>
@@ -1237,12 +1598,15 @@ export default function FeedPage() {
             <button onClick={() => router.push("/search")}>
               people
             </button>
+
           </div>
 
           <div style={{ marginTop: "7px" }}>
             © 2001–2026 Klyp · made for people, not algorithms
           </div>
+
         </footer>
+
       </div>
     </main>
   );
