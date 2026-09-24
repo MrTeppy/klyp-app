@@ -33,10 +33,10 @@ function timeAgo(date?: string) {
   const diff = Date.now() - new Date(date).getTime();
 
   if (diff < 60000) return "just now";
-  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
-  if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+  if (diff < 3600000) return `${Math.floor(diff / 60000)} min ago`;
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)} hr ago`;
 
-  return `${Math.floor(diff / 86400000)}d ago`;
+  return `${Math.floor(diff / 86400000)} days ago`;
 }
 
 function nameFromPost(post: Post, profiles: Record<string, Profile>) {
@@ -80,131 +80,75 @@ function Play({ src }: { src?: string | null }) {
     <button
       onClick={toggle}
       disabled={!src}
-      className="border border-[#003f87] bg-[#0054a6] px-2 py-1 text-[11px] font-bold text-white hover:bg-[#003f87] disabled:cursor-default disabled:opacity-40"
+      className="klyp-button"
       aria-label={playing ? "Pause preview" : "Play preview"}
     >
-      {playing ? "pause" : "play"}
+      {playing ? "❚❚" : "▶ PLAY"}
     </button>
   );
 }
 
-function MusicBox({ post }: { post: Post }) {
+function MusicPlayer({ post }: { post: Post }) {
   if (!post.song_title) return null;
 
   return (
-    <div className="my-3 border border-[#7d9fbe] bg-[#edf5fc]">
-      <div className="flex">
-        <div className="h-[74px] w-[74px] shrink-0 border-r border-[#7d9fbe] bg-[#d5e5f2]">
-          {post.album_art ? (
-            <img
-              src={post.album_art}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-3xl text-[#17528e]">
-              ♪
-            </div>
-          )}
-        </div>
+    <div className="music-player">
+      <div className="music-top">
+        <span>♫ KLYP MUSIC</span>
+        <span>NOW PLAYING</span>
+      </div>
 
-        <div className="min-w-0 flex-1 px-3 py-2">
-          <div className="text-[9px] font-bold uppercase tracking-wide text-[#557493]">
-            currently listening
-          </div>
+      <div className="music-content">
+        {post.album_art ? (
+          <img
+            src={post.album_art}
+            alt=""
+            className="album-art"
+          />
+        ) : (
+          <div className="album-placeholder">♫</div>
+        )}
 
-          <div className="mt-1 truncate text-[13px] font-bold text-[#003f87]">
+        <div className="music-info">
+          <a
+            href={post.external_url || "#"}
+            target="_blank"
+            rel="noreferrer"
+            className="song-title"
+          >
             {post.song_title}
-          </div>
+          </a>
 
-          <div className="truncate text-[11px] text-[#385b7d]">
+          <div className="song-artist">
             {post.song_artist || "unknown artist"}
           </div>
 
-          {post.external_url ? (
-            <a
-              href={post.external_url}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[10px] text-[#004fa3] hover:underline"
-            >
-              listen on Apple Music
-            </a>
-          ) : null}
-        </div>
+          <div className="music-actions">
+            <Play src={post.preview_url} />
 
-        <div className="flex items-center border-l border-[#7d9fbe] px-2">
-          <Play src={post.preview_url} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function NowPlaying({ post }: { post?: Post }) {
-  return (
-    <div className="border border-[#6f91b0] bg-[#f7fbff]">
-      <div className="border-b border-[#6f91b0] bg-[#dbeaf6] px-2 py-1 text-[10px] font-bold text-[#003f87]">
-        NOW PLAYING
-      </div>
-
-      <div className="p-2">
-        {post ? (
-          <>
-            {post.album_art ? (
-              <img
-                src={post.album_art}
-                alt=""
-                className="mx-auto mb-2 h-[105px] w-[105px] border border-[#527896] object-cover"
-              />
-            ) : (
-              <div className="mx-auto mb-2 flex h-[105px] w-[105px] items-center justify-center border border-[#527896] bg-[#dbe8f2] text-4xl text-[#24547e]">
-                ♪
-              </div>
-            )}
-
-            <div className="text-center">
-              <div className="truncate text-[11px] font-bold text-[#003f87]">
-                {post.song_title}
-              </div>
-
-              <div className="truncate text-[10px] text-[#58738e]">
-                {post.song_artist || "unknown artist"}
-              </div>
-
-              <div className="mt-2">
-                <Play src={post.preview_url} />
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="py-5 text-center text-[10px] leading-4 text-[#58738e]">
-            nobody is listening
-            <br />
-            to anything yet.
+            {post.external_url ? (
+              <a
+                href={post.external_url}
+                target="_blank"
+                rel="noreferrer"
+                className="music-link"
+              >
+                Apple Music
+              </a>
+            ) : null}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
 }
 
-function SmallBox({
-  title,
+function SectionTitle({
   children,
 }: {
-  title: string;
   children: React.ReactNode;
 }) {
-  return (
-    <div className="mb-4 border border-[#7d9fbe] bg-white">
-      <div className="border-b border-[#7d9fbe] bg-[#dbeaf6] px-2 py-1 text-[10px] font-bold text-[#003f87]">
-        {title}
-      </div>
-
-      <div className="p-2">{children}</div>
-    </div>
-  );
+  return <div className="section-title">{children}</div>;
 }
 
 export default function FeedPage() {
@@ -281,414 +225,1024 @@ export default function FeedPage() {
   const latestTrack = posts.find((post) => post.song_title);
 
   return (
-    <main className="min-h-screen bg-[#dcecf8] text-[#172b42]">
-      <div className="mx-auto max-w-[1100px] px-2 py-3">
-        {/* TOP BAR */}
-        <header className="border border-[#557d9f] bg-white">
-          <div className="bg-[#0054a6] px-3 py-2 text-white">
-            <div className="flex items-center justify-between gap-3">
-              <button
-                onClick={() => router.push("/")}
-                className="text-[27px] font-black tracking-[-0.09em] hover:underline"
-              >
-                klyp.
-              </button>
+    <main className="klyp-page">
+      <style>{`
+        * {
+          box-sizing: border-box;
+        }
 
-              <div className="text-right text-[9px] leading-3">
-                <div>music · memory · people who get it</div>
-                <div className="opacity-80">klyp.life</div>
-              </div>
-            </div>
+        .klyp-page {
+          min-height: 100vh;
+          background:
+            radial-gradient(circle at 20% 10%, rgba(255,255,255,.9), transparent 25%),
+            repeating-linear-gradient(
+              0deg,
+              #d5e7f4 0px,
+              #d5e7f4 2px,
+              #cbdfee 2px,
+              #cbdfee 4px
+            );
+          color: #111;
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 12px;
+          padding: 18px 10px 40px;
+        }
+
+        .klyp-site {
+          width: 100%;
+          max-width: 1050px;
+          margin: 0 auto;
+          border: 2px solid #123c68;
+          background: #fff;
+          box-shadow: 5px 5px 0 rgba(18,60,104,.25);
+        }
+
+        .top-ad {
+          height: 18px;
+          background: #efefef;
+          border-bottom: 1px solid #aaa;
+          color: #777;
+          font-size: 9px;
+          padding: 3px 6px;
+          text-align: right;
+        }
+
+        .masthead {
+          position: relative;
+          min-height: 116px;
+          overflow: hidden;
+          background:
+            linear-gradient(135deg, #003d80 0%, #0074c8 48%, #08a7c8 100%);
+          border-bottom: 4px solid #ffcf00;
+          padding: 18px 20px;
+        }
+
+        .masthead:after {
+          content: "";
+          position: absolute;
+          width: 240px;
+          height: 240px;
+          right: -50px;
+          top: -100px;
+          border-radius: 50%;
+          border: 28px solid rgba(255,255,255,.14);
+          box-shadow:
+            0 0 0 15px rgba(255,255,255,.07),
+            0 0 0 35px rgba(255,255,255,.05);
+        }
+
+        .logo {
+          position: relative;
+          z-index: 2;
+          display: inline-block;
+          color: #fff;
+          font-size: 62px;
+          line-height: .8;
+          font-weight: 900;
+          letter-spacing: -7px;
+          text-shadow:
+            3px 3px 0 #002b5b,
+            6px 6px 0 rgba(0,0,0,.15);
+          cursor: pointer;
+        }
+
+        .tagline {
+          position: relative;
+          z-index: 2;
+          margin-top: 12px;
+          color: #fff;
+          font-size: 11px;
+          font-weight: bold;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+        }
+
+        .top-links {
+          position: relative;
+          z-index: 3;
+          margin-top: 7px;
+          font-size: 10px;
+        }
+
+        .top-links button {
+          color: #fff;
+          text-decoration: underline;
+          margin-right: 12px;
+          font-weight: bold;
+        }
+
+        .main-nav {
+          display: flex;
+          flex-wrap: wrap;
+          border-bottom: 2px solid #174c78;
+          background: #e9f0f5;
+          padding: 0 6px;
+        }
+
+        .main-nav button {
+          border-left: 1px solid #a8b9c8;
+          padding: 7px 12px;
+          color: #003f7d;
+          font-size: 11px;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+
+        .main-nav button:last-child {
+          border-right: 1px solid #a8b9c8;
+        }
+
+        .main-nav button:hover {
+          background: #ffcf00;
+          color: #000;
+        }
+
+        .ticker {
+          background: #fff7bd;
+          border-bottom: 1px solid #d0b800;
+          padding: 5px 9px;
+          color: #333;
+          font-size: 10px;
+        }
+
+        .ticker strong {
+          color: #d00000;
+          margin-right: 8px;
+        }
+
+        .layout {
+          display: grid;
+          grid-template-columns: 165px minmax(0, 1fr) 190px;
+          gap: 9px;
+          padding: 9px;
+          background: #f7f7f7;
+        }
+
+        .column-box {
+          border: 1px solid #7895aa;
+          background: #fff;
+          margin-bottom: 9px;
+        }
+
+        .section-title {
+          padding: 5px 7px;
+          color: #fff;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: .5px;
+          text-transform: uppercase;
+          background:
+            linear-gradient(#2383c4, #07538d);
+          border-bottom: 2px solid #003c6c;
+          text-shadow: 1px 1px 0 #00375f;
+        }
+
+        .box-content {
+          padding: 8px;
+        }
+
+        .side-link {
+          display: block;
+          width: 100%;
+          text-align: left;
+          border-bottom: 1px dotted #b5c2cc;
+          padding: 4px 2px;
+          color: #004c99;
+          font-size: 11px;
+          font-weight: bold;
+        }
+
+        .side-link:hover {
+          background: #fff6a8;
+          color: #d00000;
+          text-decoration: underline;
+        }
+
+        .side-copy {
+          color: #526b7d;
+          font-size: 10px;
+          line-height: 1.5;
+        }
+
+        .friend {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          border-bottom: 1px dotted #bbb;
+          padding: 5px 0;
+          color: #004c99;
+          font-size: 10px;
+        }
+
+        .friend-dot {
+          width: 7px;
+          height: 7px;
+          border: 1px solid #176d18;
+          background: #36c43a;
+        }
+
+        .welcome {
+          border: 1px solid #557891;
+          background: #fff;
+          margin-bottom: 9px;
+        }
+
+        .welcome-inner {
+          padding: 10px;
+        }
+
+        .welcome-title {
+          color: #003f7d;
+          font-size: 19px;
+          font-weight: 900;
+          letter-spacing: -1px;
+        }
+
+        .welcome-sub {
+          margin-top: 3px;
+          color: #687d8e;
+          font-size: 10px;
+        }
+
+        .post-button {
+          margin-top: 8px;
+          border: 2px outset #ddd;
+          background: #eee;
+          color: #003f7d;
+          padding: 4px 12px;
+          font-size: 10px;
+          font-weight: bold;
+        }
+
+        .post-button:active {
+          border-style: inset;
+        }
+
+        .post {
+          border: 1px solid #8097a9;
+          background: #fff;
+          margin-bottom: 10px;
+        }
+
+        .post-head {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          background: #edf4f8;
+          border-bottom: 1px solid #a8b8c4;
+          padding: 6px;
+        }
+
+        .post-avatar {
+          flex-shrink: 0;
+        }
+
+        .post-meta {
+          min-width: 0;
+          flex: 1;
+        }
+
+        .post-name {
+          color: #003f8c;
+          font-size: 12px;
+          font-weight: 900;
+          text-decoration: underline;
+        }
+
+        .post-time {
+          margin-left: 7px;
+          color: #8798a4;
+          font-size: 9px;
+        }
+
+        .post-mood {
+          margin-top: 1px;
+          color: #596e7e;
+          font-size: 9px;
+          font-style: italic;
+        }
+
+        .post-body {
+          padding: 9px;
+        }
+
+        .post-caption {
+          color: #202d36;
+          font-size: 12px;
+          line-height: 1.55;
+          margin-bottom: 8px;
+          white-space: pre-line;
+        }
+
+        .post-image {
+          width: 100%;
+          max-height: 650px;
+          object-fit: cover;
+          border: 1px solid #657f91;
+          display: block;
+        }
+
+        .post-footer {
+          border-top: 1px solid #c5d0d8;
+          background: #f4f7f9;
+          padding: 5px 7px;
+          font-size: 9px;
+        }
+
+        .post-footer button,
+        .post-footer a {
+          color: #004d9d;
+          margin-right: 12px;
+          font-weight: bold;
+        }
+
+        .post-footer button:hover,
+        .post-footer a:hover {
+          text-decoration: underline;
+        }
+
+        .music-player {
+          border: 2px solid #285f8d;
+          background: #e7f0f7;
+          margin: 9px 0;
+          box-shadow: 2px 2px 0 #9eb3c3;
+        }
+
+        .music-top {
+          display: flex;
+          justify-content: space-between;
+          background: #174e7c;
+          color: #fff;
+          padding: 4px 6px;
+          font-size: 9px;
+          font-weight: bold;
+        }
+
+        .music-content {
+          display: flex;
+          gap: 8px;
+          padding: 7px;
+        }
+
+        .album-art,
+        .album-placeholder {
+          width: 68px;
+          height: 68px;
+          flex-shrink: 0;
+          border: 2px solid #fff;
+          outline: 1px solid #52738d;
+          object-fit: cover;
+        }
+
+        .album-placeholder {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #b7d0e1;
+          color: #174e7c;
+          font-size: 30px;
+        }
+
+        .music-info {
+          min-width: 0;
+          padding-top: 1px;
+        }
+
+        .song-title {
+          display: block;
+          color: #003f91;
+          font-size: 12px;
+          font-weight: 900;
+          text-decoration: underline;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .song-artist {
+          color: #536d7e;
+          font-size: 10px;
+          margin-top: 2px;
+        }
+
+        .music-actions {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          margin-top: 9px;
+        }
+
+        .klyp-button {
+          border: 2px outset #eee;
+          background: #eee;
+          color: #002f60;
+          padding: 3px 7px;
+          font-size: 9px;
+          font-weight: bold;
+        }
+
+        .klyp-button:active {
+          border-style: inset;
+        }
+
+        .music-link {
+          color: #004d9d;
+          font-size: 9px;
+          text-decoration: underline;
+        }
+
+        .now-playing {
+          border: 1px solid #4f6f87;
+          background: #fff;
+          margin-bottom: 9px;
+        }
+
+        .now-playing-inner {
+          padding: 8px;
+          text-align: center;
+        }
+
+        .now-playing-art {
+          width: 130px;
+          height: 130px;
+          object-fit: cover;
+          border: 3px solid #fff;
+          outline: 1px solid #57758b;
+          box-shadow: 3px 3px 0 #b2c1cb;
+        }
+
+        .now-playing-placeholder {
+          width: 130px;
+          height: 130px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #d9e7f0;
+          border: 3px solid #fff;
+          outline: 1px solid #57758b;
+          color: #24587e;
+          font-size: 45px;
+        }
+
+        .now-title {
+          margin-top: 8px;
+          color: #003f7d;
+          font-size: 11px;
+          font-weight: 900;
+        }
+
+        .now-artist {
+          color: #637888;
+          font-size: 9px;
+        }
+
+        .now-button {
+          margin-top: 7px;
+        }
+
+        .stat {
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px dotted #aaa;
+          padding: 4px 0;
+          font-size: 10px;
+        }
+
+        .stat-label {
+          color: #687b89;
+        }
+
+        .stat-value {
+          color: #003f7d;
+          font-weight: bold;
+        }
+
+        .banner {
+          margin-top: 9px;
+          border: 1px solid #888;
+          background: #ffffcc;
+          padding: 7px;
+          color: #333;
+          text-align: center;
+          font-size: 9px;
+        }
+
+        .footer {
+          border-top: 3px solid #174c78;
+          background: #e8eff4;
+          padding: 10px;
+          color: #617585;
+          font-size: 9px;
+          text-align: center;
+        }
+
+        .footer a,
+        .footer button {
+          color: #004d9d;
+          text-decoration: underline;
+          margin: 0 5px;
+        }
+
+        .loading {
+          padding: 20px;
+          text-align: center;
+          color: #547085;
+        }
+
+        @media (max-width: 800px) {
+          .layout {
+            grid-template-columns: 1fr;
+          }
+
+          .left-column,
+          .right-column {
+            display: block;
+          }
+
+          .logo {
+            font-size: 48px;
+          }
+        }
+
+        @media (min-width: 801px) {
+          .left-column,
+          .right-column {
+            display: block;
+          }
+        }
+      `}</style>
+
+      <div className="klyp-site">
+        <div className="top-ad">
+          klyp.life &nbsp; | &nbsp; welcome to the internet
+        </div>
+
+        <header className="masthead">
+          <button
+            onClick={() => router.push("/")}
+            className="logo"
+          >
+            klyp.
+          </button>
+
+          <div className="tagline">
+            music · memory · people who get it
           </div>
 
-          <nav className="flex flex-wrap items-center gap-x-1 bg-[#e9f3fb] px-2 py-1 text-[11px]">
-            <button
-              onClick={() => router.push("/feed")}
-              className="bg-[#0054a6] px-2 py-0.5 font-bold text-white"
-            >
-              home
-            </button>
-
-            <span className="text-[#7792aa]">|</span>
-
-            <button
-              onClick={() => router.push("/profile")}
-              className="px-1 text-[#004fa3] hover:underline"
-            >
+          <div className="top-links">
+            <button onClick={() => router.push("/profile")}>
               my page
             </button>
 
-            <span className="text-[#7792aa]">|</span>
-
-            <button
-              onClick={() => router.push("/friends")}
-              className="px-1 text-[#004fa3] hover:underline"
-            >
+            <button onClick={() => router.push("/friends")}>
               friends
             </button>
 
-            <span className="text-[#7792aa]">|</span>
-
-            <button
-              onClick={() => router.push("/messages")}
-              className="px-1 text-[#004fa3] hover:underline"
-            >
+            <button onClick={() => router.push("/messages")}>
               messages
             </button>
 
-            <span className="text-[#7792aa]">|</span>
-
-            <button
-              onClick={() => router.push("/search")}
-              className="px-1 text-[#004fa3] hover:underline"
-            >
-              people
+            <button onClick={() => router.push("/search")}>
+              search
             </button>
-
-            <span className="text-[#7792aa]">|</span>
-
-            <button
-              onClick={() => router.push("/upload")}
-              className="px-1 font-bold text-[#004fa3] hover:underline"
-            >
-              + post
-            </button>
-          </nav>
+          </div>
         </header>
 
-        <div className="mt-3 grid gap-3 md:grid-cols-[175px_minmax(0,1fr)_205px]">
-          {/* LEFT COLUMN */}
-          <aside>
-            <SmallBox title="MY KLYP">
-              <div className="flex gap-2">
-                <MiniAvatar />
+        <nav className="main-nav">
+          <button onClick={() => router.push("/feed")}>
+            home
+          </button>
 
-                <div className="min-w-0 text-[10px] leading-4">
-                  <button
-                    onClick={() => router.push("/profile")}
-                    className="block truncate font-bold text-[#004fa3] hover:underline"
-                  >
-                    my profile
-                  </button>
+          <button onClick={() => router.push("/profile")}>
+            my page
+          </button>
 
-                  <button
-                    onClick={() => router.push("/friends")}
-                    className="block text-[#004fa3] hover:underline"
-                  >
-                    friends
-                  </button>
+          <button onClick={() => router.push("/friends")}>
+            people
+          </button>
 
-                  <button
-                    onClick={() => router.push("/messages")}
-                    className="block text-[#004fa3] hover:underline"
-                  >
-                    inbox
-                  </button>
+          <button onClick={() => router.push("/messages")}>
+            messages
+          </button>
+
+          <button onClick={() => router.push("/search")}>
+            search
+          </button>
+
+          <button onClick={() => router.push("/upload")}>
+            + make a klyp
+          </button>
+        </nav>
+
+        <div className="ticker">
+          <strong>NEWS:</strong>
+          post a song. post a photo. tell people what you're listening to.
+        </div>
+
+        <div className="layout">
+          {/* LEFT */}
+          <aside className="left-column">
+            <div className="column-box">
+              <SectionTitle>My Klyp</SectionTitle>
+
+              <div className="box-content">
+                <div className="side-link">
+                  <MiniAvatar />
                 </div>
-              </div>
-            </SmallBox>
-
-            <SmallBox title="QUICK LINKS">
-              <div className="space-y-1 text-[10px] leading-4">
-                <button
-                  onClick={() => router.push("/upload")}
-                  className="block text-left text-[#004fa3] hover:underline"
-                >
-                  &gt; post something
-                </button>
 
                 <button
-                  onClick={() => router.push("/search")}
-                  className="block text-left text-[#004fa3] hover:underline"
+                  onClick={() => router.push("/profile")}
+                  className="side-link"
                 >
-                  &gt; find people
+                  my profile
                 </button>
 
                 <button
                   onClick={() => router.push("/friends")}
-                  className="block text-left text-[#004fa3] hover:underline"
+                  className="side-link"
                 >
-                  &gt; my friends
+                  my friends
                 </button>
 
                 <button
                   onClick={() => router.push("/messages")}
-                  className="block text-left text-[#004fa3] hover:underline"
+                  className="side-link"
                 >
-                  &gt; messages
+                  my messages
+                </button>
+
+                <button
+                  onClick={() => router.push("/upload")}
+                  className="side-link"
+                >
+                  make a new klyp
                 </button>
               </div>
-            </SmallBox>
+            </div>
 
-            <SmallBox title="ABOUT KLYP">
-              <div className="text-[10px] leading-4 text-[#4e6b84]">
-                post what you're listening to.
-                <br />
-                <br />
-                put a photo with it.
-                <br />
-                write something stupid.
-                <br />
-                find people who get it.
+            <div className="column-box">
+              <SectionTitle>Quick Links</SectionTitle>
+
+              <div className="box-content">
+                <button
+                  onClick={() => router.push("/search")}
+                  className="side-link"
+                >
+                  → find people
+                </button>
+
+                <button
+                  onClick={() => router.push("/friends")}
+                  className="side-link"
+                >
+                  → friends
+                </button>
+
+                <button
+                  onClick={() => router.push("/messages")}
+                  className="side-link"
+                >
+                  → inbox
+                </button>
+
+                <button
+                  onClick={() => router.push("/upload")}
+                  className="side-link"
+                >
+                  → post music
+                </button>
               </div>
-            </SmallBox>
+            </div>
 
-            <div className="px-1 text-[9px] leading-4 text-[#66819a]">
-              <div>you are browsing</div>
-              <div className="font-bold text-[#004fa3]">klyp.life</div>
-              <div>made for friends.</div>
+            <div className="column-box">
+              <SectionTitle>About Klyp</SectionTitle>
+
+              <div className="box-content">
+                <div className="side-copy">
+                  Klyp is a place for the songs,
+                  <br />
+                  photos and random little
+                  <br />
+                  moments you want to share
+                  <br />
+                  with your people.
+                  <br />
+                  <br />
+                  No endless algorithm.
+                  <br />
+                  Just your friends.
+                </div>
+              </div>
+            </div>
+
+            <div className="banner">
+              <strong>KLYP TIP</strong>
+              <br />
+              <br />
+              tell people WHY
+              <br />
+              you like the song.
             </div>
           </aside>
 
           {/* CENTRE */}
-          <section className="min-w-0">
-            <div className="border border-[#557d9f] bg-white">
-              <div className="border-b border-[#557d9f] bg-[#e2eef7] px-3 py-2">
-                <div className="text-[10px] font-bold text-[#55738e]">
-                  KLYP / HOME
-                </div>
+          <section>
+            <div className="welcome">
+              <SectionTitle>
+                KLYP / HOME / WHAT'S NEW
+              </SectionTitle>
 
-                <div className="mt-0.5 text-[17px] font-bold text-[#003f87]">
+              <div className="welcome-inner">
+                <div className="welcome-title">
                   what are you listening to?
                 </div>
+
+                <div className="welcome-sub">
+                  see what your people are posting right now.
+                </div>
+
+                <button
+                  onClick={() => router.push("/upload")}
+                  className="post-button"
+                >
+                  + MAKE A NEW KLYP
+                </button>
               </div>
+            </div>
 
-              <button
-                onClick={() => router.push("/upload")}
-                className="m-3 flex w-[calc(100%-24px)] items-center gap-2 border border-[#86a5bf] bg-[#f4f9fd] p-2 text-left hover:bg-[#eaf4fb]"
-              >
-                <MiniAvatar />
+            {status ? (
+              <div className="column-box">
+                <div className="loading">{status}</div>
+              </div>
+            ) : null}
 
-                <div className="flex-1">
-                  <div className="text-[11px] font-bold text-[#004fa3]">
-                    + make a new klyp
-                  </div>
+            {!status && posts.length === 0 ? (
+              <div className="column-box">
+                <SectionTitle>Nothing Here Yet</SectionTitle>
 
-                  <div className="text-[9px] text-[#71889d]">
-                    song / photo / thought
-                  </div>
-                </div>
-              </button>
-
-              {status ? (
-                <div className="mx-3 mb-3 border border-[#a8bfd2] bg-[#f2f7fb] px-2 py-2 text-[10px] text-[#55738e]">
-                  {status}
-                </div>
-              ) : null}
-
-              {!status && posts.length === 0 ? (
-                <div className="mx-3 mb-3 border border-[#a8bfd2] bg-[#f2f7fb] px-3 py-8 text-center">
-                  <div className="text-[12px] font-bold text-[#003f87]">
-                    the feed is empty.
-                  </div>
-
-                  <div className="mt-1 text-[10px] text-[#68829a]">
-                    post something and make it less empty.
+                <div className="box-content">
+                  <div className="side-copy">
+                    Your feed is completely empty.
+                    <br />
+                    <br />
+                    Be the first person to put something here.
                   </div>
 
                   <button
                     onClick={() => router.push("/upload")}
-                    className="mt-3 text-[10px] font-bold text-[#004fa3] hover:underline"
+                    className="post-button"
                   >
-                    make your first post →
+                    POST SOMETHING
                   </button>
                 </div>
-              ) : null}
+              </div>
+            ) : null}
 
-              {posts.map((post, index) => {
-                const name = nameFromPost(post, profiles);
+            {posts.map((post, index) => {
+              const name = nameFromPost(post, profiles);
 
-                return (
-                  <article
-                    key={post.id}
-                    className="border-t border-[#9ab3c8] px-3 py-4"
-                  >
-                    <div className="flex gap-2">
-                      <div className="shrink-0">
-                        <MiniAvatar label={name} />
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="text-[11px]">
-                          <button className="font-bold text-[#003f87] hover:underline">
-                            {name}
-                          </button>
-
-                          <span className="ml-2 text-[9px] text-[#7890a5]">
-                            {timeAgo(post.created_at)}
-                          </span>
-                        </div>
-
-                        {post.mood_line ? (
-                          <div className="mt-0.5 text-[10px] text-[#617b92]">
-                            {post.mood_line}
-                          </div>
-                        ) : null}
-
-                        {post.caption ? (
-                          <p className="mt-2 whitespace-pre-line text-[12px] leading-5 text-[#263f57]">
-                            {post.caption}
-                          </p>
-                        ) : null}
-
-                        {post.image_url ? (
-                          <div className="mt-3 border border-[#7797b2] bg-[#dbe8f1] p-1">
-                            <img
-                              src={post.image_url}
-                              alt=""
-                              className="max-h-[650px] w-full object-cover"
-                            />
-                          </div>
-                        ) : null}
-
-                        <MusicBox post={post} />
-
-                        <div className="mt-2 flex flex-wrap items-center gap-x-3 text-[9px]">
-                          <button className="text-[#004fa3] hover:underline">
-                            ♡ like
-                          </button>
-
-                          <button className="text-[#004fa3] hover:underline">
-                            comment
-                          </button>
-
-                          <button className="text-[#004fa3] hover:underline">
-                            reply
-                          </button>
-
-                          <span className="text-[#9aabb9]">
-                            {post.created_at
-                              ? new Date(
-                                  post.created_at
-                                ).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                })
-                              : ""}
-                          </span>
-                        </div>
-
-                        {index === 0 ? (
-                          <div className="mt-3 text-[9px] text-[#91a4b4]">
-                            — latest klyp —
-                          </div>
-                        ) : null}
-                      </div>
+              return (
+                <article key={post.id} className="post">
+                  <div className="post-head">
+                    <div className="post-avatar">
+                      <MiniAvatar label={name} />
                     </div>
-                  </article>
-                );
-              })}
-            </div>
+
+                    <div className="post-meta">
+                      <button className="post-name">
+                        {name}
+                      </button>
+
+                      <span className="post-time">
+                        {timeAgo(post.created_at)}
+                      </span>
+
+                      {post.mood_line ? (
+                        <div className="post-mood">
+                          {post.mood_line}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div className="post-body">
+                    {post.caption ? (
+                      <div className="post-caption">
+                        {post.caption}
+                      </div>
+                    ) : null}
+
+                    {post.image_url ? (
+                      <img
+                        src={post.image_url}
+                        alt=""
+                        className="post-image"
+                      />
+                    ) : null}
+
+                    <MusicPlayer post={post} />
+
+                    {index === 0 ? (
+                      <div
+                        style={{
+                          color: "#b00000",
+                          fontSize: "9px",
+                          fontWeight: "bold",
+                          marginTop: "5px",
+                        }}
+                      >
+                        ★ newest klyp
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="post-footer">
+                    <button>♡ like</button>
+
+                    <button>comment</button>
+
+                    <button>reply</button>
+
+                    <span style={{ color: "#8999a5" }}>
+                      {post.created_at
+                        ? new Date(
+                            post.created_at
+                          ).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : ""}
+                    </span>
+                  </div>
+                </article>
+              );
+            })}
           </section>
 
-          {/* RIGHT COLUMN */}
-          <aside>
-            <NowPlaying post={latestTrack} />
+          {/* RIGHT */}
+          <aside className="right-column">
+            <div className="now-playing">
+              <SectionTitle>Now Playing</SectionTitle>
 
-            <div className="mt-3">
-              <SmallBox title="THE KLYP BOARD">
-                <div className="text-[10px] leading-4">
-                  <div className="font-bold text-[#003f87]">
-                    what's happening?
-                  </div>
+              <div className="now-playing-inner">
+                {latestTrack ? (
+                  <>
+                    {latestTrack.album_art ? (
+                      <img
+                        src={latestTrack.album_art}
+                        alt=""
+                        className="now-playing-art"
+                      />
+                    ) : (
+                      <div className="now-playing-placeholder">
+                        ♫
+                      </div>
+                    )}
 
-                  <div className="mt-1 text-[#58748d]">
-                    people are posting music, photos and little bits of their
-                    lives.
-                  </div>
+                    <div className="now-title">
+                      {latestTrack.song_title}
+                    </div>
 
-                  <div className="mt-2 border-t border-[#c3d3df] pt-2">
+                    <div className="now-artist">
+                      {latestTrack.song_artist}
+                    </div>
+
+                    <div className="now-button">
+                      <Play src={latestTrack.preview_url} />
+                    </div>
+                  </>
+                ) : (
+                  <div className="side-copy">
+                    Nobody has posted a song yet.
+                    <br />
+                    <br />
                     <button
                       onClick={() => router.push("/upload")}
-                      className="text-left text-[#004fa3] hover:underline"
+                      className="side-link"
                     >
-                      make a post →
+                      post one →
                     </button>
                   </div>
-                </div>
-              </SmallBox>
+                )}
+              </div>
             </div>
 
-            <SmallBox title="PEOPLE">
-              <div className="space-y-1 text-[10px]">
+            <div className="column-box">
+              <SectionTitle>Klyp Stats</SectionTitle>
+
+              <div className="box-content">
+                <div className="stat">
+                  <span className="stat-label">klyps</span>
+                  <span className="stat-value">
+                    {posts.length}
+                  </span>
+                </div>
+
+                <div className="stat">
+                  <span className="stat-label">latest</span>
+                  <span className="stat-value">
+                    {posts.length ? "today" : "—"}
+                  </span>
+                </div>
+
+                <div className="stat">
+                  <span className="stat-label">music</span>
+                  <span className="stat-value">
+                    {posts.filter((p) => p.song_title).length}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="column-box">
+              <SectionTitle>People</SectionTitle>
+
+              <div className="box-content">
                 <button
                   onClick={() => router.push("/search")}
-                  className="block text-left text-[#004fa3] hover:underline"
+                  className="side-link"
                 >
                   find someone
                 </button>
 
                 <button
                   onClick={() => router.push("/friends")}
-                  className="block text-left text-[#004fa3] hover:underline"
+                  className="side-link"
                 >
-                  view your friends
+                  your friends
                 </button>
 
                 <button
                   onClick={() => router.push("/messages")}
-                  className="block text-left text-[#004fa3] hover:underline"
+                  className="side-link"
                 >
                   send a message
                 </button>
               </div>
-            </SmallBox>
+            </div>
 
-            <div className="border border-[#7d9fbe] bg-[#eaf3fa] p-2 text-[9px] leading-4 text-[#66819a]">
-              <div className="font-bold text-[#315d82]">
-                klyp tip of the day
-              </div>
+            <div className="column-box">
+              <SectionTitle>Did You Know?</SectionTitle>
 
-              <div className="mt-1">
-                don't just post the song.
-                <br />
-                say why you're listening to it.
+              <div className="box-content">
+                <div className="side-copy">
+                  You can put a song on a Klyp
+                  <br />
+                  and let people hear a
+                  <br />
+                  30 second preview.
+                  <br />
+                  <br />
+                  Try it.
+                </div>
               </div>
             </div>
           </aside>
         </div>
 
-        {/* FOOTER */}
-        <footer className="mt-3 border border-[#7d9fbe] bg-white px-3 py-2 text-[9px] text-[#66819a]">
-          <div className="flex flex-wrap justify-between gap-x-4 gap-y-1">
-            <div>
-              <span className="font-bold text-[#003f87]">klyp.life</span>
-              {" · "}
-              music · memory · people who get it
-            </div>
+        <footer className="footer">
+          <div>
+            <strong>KLYP.LIFE</strong>
+            {" · "}
+            music · memory · people who get it
+          </div>
 
-            <div className="flex gap-2">
-              <button
-                onClick={() => router.push("/feed")}
-                className="text-[#004fa3] hover:underline"
-              >
-                home
-              </button>
+          <div style={{ marginTop: "5px" }}>
+            <button onClick={() => router.push("/feed")}>
+              home
+            </button>
 
-              <span>|</span>
+            <span>|</span>
 
-              <button
-                onClick={() => router.push("/search")}
-                className="text-[#004fa3] hover:underline"
-              >
-                people
-              </button>
+            <button onClick={() => router.push("/profile")}>
+              my page
+            </button>
 
-              <span>|</span>
+            <span>|</span>
 
-              <button
-                onClick={() => router.push("/messages")}
-                className="text-[#004fa3] hover:underline"
-              >
-                messages
-              </button>
-            </div>
+            <button onClick={() => router.push("/friends")}>
+              friends
+            </button>
+
+            <span>|</span>
+
+            <button onClick={() => router.push("/messages")}>
+              messages
+            </button>
+
+            <span>|</span>
+
+            <button onClick={() => router.push("/search")}>
+              people
+            </button>
+          </div>
+
+          <div style={{ marginTop: "7px" }}>
+            © 2001–2026 Klyp · made for people, not algorithms
           </div>
         </footer>
-
-        <div className="py-3 text-center text-[8px] text-[#7891a5]">
-          best viewed on the internet
-        </div>
       </div>
     </main>
   );
